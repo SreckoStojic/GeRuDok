@@ -1,0 +1,60 @@
+package views;
+
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JDesktopPane;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Project;
+import model.Workspace;
+
+public class WorkspaceViewer extends JDesktopPane implements Observer {
+	private ArrayList<ProjectViewer> projectViewers = new ArrayList();
+	Workspace workspace;
+	
+ public WorkspaceViewer(Workspace workspace) {
+		// TODO Auto-generated constructor stub
+	       super();
+	       this.workspace=workspace;
+	       this.workspace.addObserver(this);
+	}
+
+	public ArrayList<ProjectViewer> getProjectViewers() {
+	return projectViewers;
+}
+
+public void setProjectViewers(ArrayList<ProjectViewer> projectViewers) {
+	this.projectViewers = projectViewers;
+}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+	if (arg instanceof Project){
+		Project project = (Project) arg;
+		ProjectViewer projectViewer= new ProjectViewer(project);
+		//addProjectViewer(projectViewer);
+		this.projectViewers.add(projectViewer);
+		MainFrame.getInstance().getDesktopPane().add(projectViewer);
+		
+		try {
+			projectViewer.setSelected(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	System.out.println(this.projectViewers.size());
+	}
+	else if (arg.equals("removeProject")){
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		ProjectViewer projectViewer = MainFrame.getInstance().selectInternalFrame(node);
+		WorkspaceViewer workspaceViewer= (WorkspaceViewer) MainFrame.getInstance().getDesktopPane();
+	    workspaceViewer.remove(projectViewer);
+	}
+	  
+}
+	
+}

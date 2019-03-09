@@ -1,0 +1,237 @@
+package mainFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import actions.AboutDialogAction;
+import actions.ActionManager;
+import actions.CascadeHor;
+import actions.TileHor;
+import actions.TileVer;
+
+public class MenuBar extends JMenuBar {
+	JMenu project;
+	JMenu edit;
+	JMenu window;
+	JMenu settings,help,Language,miLookAndFeel;
+	JMenuItem miCascadeHorizontally,miTileHorizontally,miTileVertically,miAbout;
+	JCheckBoxMenuItem mniSrpskiLatinica;
+	JCheckBoxMenuItem mniEngleski;
+	JCheckBoxMenuItem mniSrpskiCirilica;
+	ActionManager actionManager;
+	
+
+	public MenuBar() {
+
+	    project = new JMenu(MainFrame.getInstance().getResourceBundle().getString("mbProject"));
+		project.setMnemonic('P');
+
+		project.add(MainFrame.getInstance().getActionManager().getNewProject());
+
+		project.add(MainFrame.getInstance().getActionManager().getNewDocument());
+
+		project.add(MainFrame.getInstance().getActionManager().getNewPage());
+
+		project.addSeparator();
+
+		project.add(MainFrame.getInstance().getActionManager().getGraphicSlot());
+
+		project.add(MainFrame.getInstance().getActionManager().getTextSlot());
+
+		project.addSeparator();
+
+		project.add(MainFrame.getInstance().getActionManager().getSaveproject());
+
+		project.add(MainFrame.getInstance().getActionManager().getOpenproject());
+
+		// edit
+
+	    edit = new JMenu(MainFrame.getInstance().getResourceBundle().getString("mbEdit"));
+		edit.setMnemonic(KeyEvent.VK_E);
+
+		edit.add(MainFrame.getInstance().getActionManager().getDeleteItem());
+
+		// window
+
+		window = new JMenu(MainFrame.getInstance().getResourceBundle().getString("mbWindow"));
+		window.setMnemonic(KeyEvent.VK_W);
+
+	    miCascadeHorizontally = new JMenuItem("Cascade horizontally");
+		miCascadeHorizontally.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		miCascadeHorizontally.setIcon(new ImageIcon("images/cascade-view.png"));
+		miCascadeHorizontally.addActionListener(new CascadeHor());
+		window.add(miCascadeHorizontally);
+
+	    miTileHorizontally = new JMenuItem("Tile horizontally");
+		miTileHorizontally.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
+				ActionEvent.ALT_MASK));
+		miTileHorizontally.setIcon(new ImageIcon("images/tile-h.png"));
+		miTileHorizontally.addActionListener(new TileHor());
+		window.add(miTileHorizontally);
+
+		miTileVertically = new JMenuItem("Tile vertically");
+		miTileVertically.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
+				ActionEvent.ALT_MASK));
+		miTileVertically.setIcon(new ImageIcon("images/tile-v.png"));
+		miTileVertically.addActionListener(new TileVer());
+		window.add(miTileVertically);
+
+	    settings = new JMenu(MainFrame.getInstance().getResourceBundle().getString("mbSettings"));
+		settings.setMnemonic(KeyEvent.VK_S);
+
+	    miLookAndFeel = new JMenu("Look and feel");
+
+		miLookAndFeel.setMnemonic('l');
+
+		JMenuItem jmaS = new JMenuItem("Nimbus");
+		jmaS.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				MainFrame.LOOKANDFEEL = "Nimbus";
+				MainFrame.initLookAndFeel();
+
+			}
+		});
+
+		miLookAndFeel.add(jmaS);
+
+		miLookAndFeel.setIcon(new ImageIcon("images/looknfeel-icon.png"));
+
+		settings.add(miLookAndFeel);
+
+	    Language = new JMenu(MainFrame.getInstance().getResourceBundle().getString("mbLanguage"));
+		Language.setMnemonic(KeyEvent.VK_L);
+		
+		
+		mniEngleski = new JCheckBoxMenuItem("English");
+		mniEngleski.setSelected(true);
+		mniEngleski.setIcon(new ImageIcon("images/eng-flag.png"));
+		mniEngleski.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Locale.setDefault(new Locale("en", "US"));
+				 MainFrame.getInstance().changeLanguage();
+			}
+		});
+		Language.add(mniEngleski);
+
+		mniSrpskiLatinica = new JCheckBoxMenuItem("Serbian - Latinic");
+		mniSrpskiLatinica.setIcon(new ImageIcon("images/Serbia-Flag-icon.png"));
+		mniSrpskiLatinica.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Locale.setDefault(new Locale("en", "US"));
+				MainFrame.getInstance().changeLanguage();
+
+			}
+		});
+		Language.add(mniSrpskiLatinica);
+		
+		mniSrpskiCirilica = new JCheckBoxMenuItem("Serbian - Cyrillic");
+		mniSrpskiCirilica.setIcon(new ImageIcon("images/Serbia-Flag-icon.png"));
+		mniSrpskiCirilica.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Locale.setDefault(new Locale("sr", "RS", "Cyrillic"));
+				MainFrame.getInstance().changeLanguage();
+
+			}
+		});
+		Language.add(mniSrpskiCirilica);
+
+	
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(mniEngleski);
+		bg.add(mniSrpskiLatinica);
+		bg.add(mniSrpskiCirilica);
+		
+
+	    help = new JMenu(MainFrame.getInstance().getResourceBundle().getString("mbHelp"));
+		help.setMnemonic(KeyEvent.VK_H);
+
+	    miAbout = new JMenuItem("About");
+		miAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+				ActionEvent.CTRL_MASK));
+		miAbout.setIcon(new ImageIcon("images/info-logo.png"));
+		miAbout.addActionListener(new AboutDialogAction());
+		help.add(miAbout);
+
+		add(project);
+		add(edit);
+		add(window);
+		add(settings);
+		add(Language);
+		add(help);
+	}
+	public void changeText(){
+		project.setText(MainFrame.getInstance().getResourceBundle().getString("mbProject"));
+		edit.setText(MainFrame.getInstance().getResourceBundle().getString("mbEdit"));
+		window.setText(MainFrame.getInstance().getResourceBundle().getString("mbWindow"));
+		settings.setText(MainFrame.getInstance().getResourceBundle().getString("mbSettings")); //promena imena za MenuBar
+		Language.setText(MainFrame.getInstance().getResourceBundle().getString("mbLanguage"));
+	    help.setText(MainFrame.getInstance().getResourceBundle().getString("mbHelp"));
+	    miCascadeHorizontally.setText(MainFrame.getInstance().getResourceBundle().getString("miCHorizontaly"));
+	    miTileHorizontally.setText(MainFrame.getInstance().getResourceBundle().getString("miTileH"));
+	    miTileVertically.setText(MainFrame.getInstance().getResourceBundle().getString("miTileV"));
+	    miLookAndFeel.setText(MainFrame.getInstance().getResourceBundle().getString("miLooknFeel"));
+	    mniEngleski.setText(MainFrame.getInstance().getResourceBundle().getString("miEnglish"));
+	    mniSrpskiLatinica.setText(MainFrame.getInstance().getResourceBundle().getString("miSerbian"));
+	    mniSrpskiCirilica.setText(MainFrame.getInstance().getResourceBundle().getString("miSerbianCyrillic"));
+	    miAbout.setText(MainFrame.getInstance().getResourceBundle().getString("miAbout"));
+	    
+	    
+	    
+		ResourceBundle resourceBundle=MainFrame.getInstance().getResourceBundle();
+	
+		this.actionManager=MainFrame.getInstance().getActionManager();   // Promena imena za Menu Iteme
+		actionManager.getNewProject().putValue("Name",resourceBundle.getString("miNewProject") );
+		actionManager.getNewProject().putValue("ShortDescription",resourceBundle.getString("miNewProject") );
+	
+		actionManager.getNewDocument().putValue("Name",resourceBundle.getString("miNewDocument") );
+		actionManager.getNewDocument().putValue("ShortDescription",resourceBundle.getString("miNewDocument") );
+		
+		actionManager.getNewPage().putValue("Name",resourceBundle.getString("miNewPage") );
+		actionManager.getNewPage().putValue("ShortDescription",resourceBundle.getString("miNewPage") );
+		
+		actionManager.getGraphicSlot().putValue("Name",resourceBundle.getString("miNewGS") );
+		actionManager.getGraphicSlot().putValue("ShortDescription",resourceBundle.getString("miNewGS") );
+		
+		actionManager.getTextSlot().putValue("Name",resourceBundle.getString("miNewTS") );
+		actionManager.getTextSlot().putValue("ShortDescription",resourceBundle.getString("miNewTS") );
+		
+		actionManager.getSaveproject().putValue("Name",resourceBundle.getString("miSaveProject") );
+		actionManager.getSaveproject().putValue("ShortDescription",resourceBundle.getString("miSaveProject") );
+		
+		actionManager.getOpenproject().putValue("Name",resourceBundle.getString("miOpenProject") );
+		actionManager.getOpenproject().putValue("ShortDescription",resourceBundle.getString("miOpenProject") );
+		
+		actionManager.getDeleteItem().putValue("Name", resourceBundle.getString("miDelete"));
+		actionManager.getDeleteItem().putValue("ShortDescription", resourceBundle.getString("miDelete"));
+		
+		SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getTree());
+		
+		
+		
+		
+		
+	}
+
+}

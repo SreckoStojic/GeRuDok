@@ -1,0 +1,51 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultTreeModel;
+
+import mainFrame.MainFrame;
+import model.Project;
+import model.Workspace;
+
+public class NewProject extends AbstractAction implements ActionListener {
+	
+	public NewProject()
+	  {
+	    putValue("SmallIcon", loadIcon("images/new-project.png"));
+	    putValue("Name", "New project");
+	    putValue("ShortDescription", "New project");
+	    
+	  }
+	 public Icon loadIcon(String fileName)
+	  {
+	    URL imageURL = getClass().getClassLoader().getResource(fileName);
+	    Icon icon = null;
+	    if (imageURL != null) {
+	      icon = new ImageIcon(imageURL);
+	    } else {
+	      System.err.println("Resource not found: " + fileName);
+	    }
+	    return icon;
+	  }
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Workspace workspace = (Workspace)MainFrame.getInstance().getTree().getModel().getRoot();
+		Project project = new Project("Project " + (workspace.getChildCount()+1),workspace);
+		workspace.insert(project, workspace.getChildCount());
+		
+		((DefaultTreeModel)MainFrame.getInstance().getTree().getModel()).reload();
+		
+			
+	}
+	
+
+}

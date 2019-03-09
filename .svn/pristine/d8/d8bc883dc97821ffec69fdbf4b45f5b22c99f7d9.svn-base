@@ -1,0 +1,135 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.SwingUtilities;
+import javax.swing.tree.MutableTreeNode;
+
+import elements.CircleElement;
+import elements.RectangleElement;
+import mainFrame.MainFrame;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+import views.ProjectViewer;
+import views.WorkspaceViewer;
+
+public class DeleteItem implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		removeSelected();
+
+	}
+
+	private void removeSelected() {
+
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		if (node instanceof Project) {
+			Project project = (Project) node;
+			Workspace workspace = (Workspace) project.getParent();
+			ProjectViewer projectViewer = MainFrame.getInstance()
+					.selectInternalFrame(node);
+		    WorkspaceViewer workspaceViewer=new WorkspaceViewer(workspace);
+		    workspaceViewer.remove(projectViewer);
+			MainFrame.getInstance().getDesktopPane().remove(projectViewer);
+			workspace.remove(project);
+
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+
+			MainFrame.getInstance().getDesktopPane().updateUI();
+			
+
+		} else if (node instanceof Document) {
+			Document document = (Document) node;
+			Project project = (Project) document.getParent();
+
+			ProjectViewer projectViewer = (ProjectViewer) MainFrame
+					.getInstance().selectInternalFrame(project);
+
+			projectViewer.removeDocumentViewer(document);
+
+			project.remove(document);
+			MainFrame.getInstance().getDesktopPane().updateUI();
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+		} else if (node instanceof Page) {
+			Page page = (Page) node;
+
+			Document document = (Document) page.getParent();
+			document.remove(page);
+
+			DocumentViewer documentViewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+			documentViewer.removePageViewerForPage(page);
+
+			MainFrame.getInstance().getTree().updateUI();
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+		} else if (node instanceof TextSlot) {
+			TextSlot textSlot = (TextSlot) node;
+			Page page = (Page) textSlot.getParent();
+			DocumentViewer documentViewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+
+			PageViewer pageViewer = documentViewer.getPageViewerForPage(page);
+			pageViewer.removeTextViewerForSlot(textSlot);
+
+			page.remove(textSlot);
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+		} else if (node instanceof GraphSlot) {
+			GraphSlot graphSlot = (GraphSlot) node;
+			Page page = (Page) graphSlot.getParent();
+			DocumentViewer documentViewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+
+			PageViewer pageViewer = documentViewer.getPageViewerForPage(page);
+			pageViewer.removeGraphViewerForSlot(graphSlot);
+
+			page.remove(graphSlot);
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+		} else if (node instanceof CircleElement) {
+			CircleElement circleElement = (CircleElement) node;
+			GraphSlot graphSlot = (GraphSlot) circleElement.getParent();
+			graphSlot.remove(circleElement);
+
+			DocumentViewer documentviewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+
+			Page page = (Page) graphSlot.getParent();
+			PageViewer pageviewer = documentviewer.getPageViewerForPage(page);
+			pageviewer.update(null, null);
+
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+		} else if (node instanceof RectangleElement) {
+			RectangleElement recElement = (RectangleElement) node;
+			GraphSlot graphSlot = (GraphSlot) recElement.getParent();
+			graphSlot.remove(recElement);
+
+			DocumentViewer documentviewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+
+			Page page = (Page) graphSlot.getParent();
+			PageViewer pageviewer = documentviewer.getPageViewerForPage(page);
+			pageviewer.update(null, null);
+
+			SwingUtilities.updateComponentTreeUI(MainFrame.getInstance()
+					.getTree());
+		}
+
+	}
+
+}

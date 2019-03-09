@@ -1,0 +1,13 @@
+package model;
+
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+
+public class CustomTreeModel extends DefaultTreeModel {
+	
+	public CustomTreeModel(MutableTreeNode node)
+	  {
+	    super(node);
+	  }
+
+}

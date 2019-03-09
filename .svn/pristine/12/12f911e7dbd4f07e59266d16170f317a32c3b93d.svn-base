@@ -1,0 +1,151 @@
+package mainFrame;
+
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeNode;
+
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+import views.ProjectViewer;
+import actions.ActionManager;
+
+public class TreeWithListener extends JTree implements TreeSelectionListener {
+	private ActionManager actionManager;
+
+	public TreeWithListener(Workspace workspace) {
+		super(workspace);
+		addTreeSelectionListener(this);
+		addMouseListener(new TreeMouseAdapter());
+
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		this.actionManager = MainFrame.getInstance().getActionManager();
+
+		if (e.getNewLeadSelectionPath() != null) {
+			TreeNode node = (TreeNode) e.getNewLeadSelectionPath()
+					.getLastPathComponent();
+			if (node instanceof Workspace){
+				enable();
+				disable(-1);		
+			}
+			
+			if (node instanceof Project) {
+				MainFrame.getInstance().selectInternalFrame(node);
+				enable();
+				disable(0);
+			
+			} else if (node instanceof Document) {
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(node.getParent());
+				projectViewer.setDocumentTab(node);
+				enable();
+			    disable(1);
+			 
+
+			} else if (node instanceof Page) {
+				TreeNode nodep = node.getParent().getParent();
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(nodep);
+				projectViewer.setDocumentTab(node.getParent());
+				MainFrame.getInstance().selectInternalFrame(nodep);
+				enable();
+			    disable(2);
+
+			
+			} else if (node instanceof TextSlot) {
+				TreeNode nodep = node.getParent().getParent().getParent();
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(nodep);
+				projectViewer.setDocumentTab(node.getParent().getParent());
+				MainFrame.getInstance().selectInternalFrame(nodep);
+				enable();
+			    disable(3);
+
+
+			} else if (node instanceof GraphSlot) {
+				TreeNode nodep = node.getParent().getParent().getParent();
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(nodep);
+				projectViewer.setDocumentTab(node.getParent().getParent());
+				MainFrame.getInstance().selectInternalFrame(nodep);
+				enable();
+			    disable(4);
+
+
+			}
+
+		}
+	}
+
+	public void refresh() {
+		SwingUtilities.updateComponentTreeUI(this);
+	}
+
+	public ActionManager getActionManager() {
+		return actionManager;
+	}
+
+	public void setActionManager(ActionManager actionManager) {
+		this.actionManager = actionManager;
+	}
+
+
+
+	public void enable() {
+		actionManager.getNewProject().setEnabled(true);
+		actionManager.getNewDocument().setEnabled(true);
+		actionManager.getNewPage().setEnabled(true);
+		actionManager.getGraphicSlot().setEnabled(true);
+		actionManager.getTextSlot().setEnabled(true);
+		actionManager.getSaveproject().setEnabled(true);
+		actionManager.getDeleteItem().setEnabled(true);
+
+	}
+	public void disable(int i){
+		
+		if (i == -1){		
+			actionManager.getNewDocument().setEnabled(false);	
+			actionManager.getNewPage().setEnabled(false);
+			actionManager.getGraphicSlot().setEnabled(false);
+			actionManager.getTextSlot().setEnabled(false);
+		}
+		if (i == 0){		
+			actionManager.getNewProject().setEnabled(false);	
+			actionManager.getNewPage().setEnabled(false);
+			actionManager.getGraphicSlot().setEnabled(false);
+			actionManager.getTextSlot().setEnabled(false);
+		}
+		if (i == 1){
+			actionManager.getNewProject().setEnabled(false);	
+			actionManager.getNewDocument().setEnabled(false);
+			actionManager.getGraphicSlot().setEnabled(false);
+			actionManager.getTextSlot().setEnabled(false);
+			
+		}
+		if (i == 2){
+			actionManager.getNewProject().setEnabled(false);
+			actionManager.getNewDocument().setEnabled(false);
+			actionManager.getNewPage().setEnabled(false);
+			
+		}
+		if (i==3 || i==4){
+			actionManager.getNewProject().setEnabled(false);	
+			actionManager.getNewPage().setEnabled(false);
+			actionManager.getGraphicSlot().setEnabled(false);
+			actionManager.getTextSlot().setEnabled(false);
+			actionManager.getNewDocument().setEnabled(false);
+			
+			
+		}
+		
+	}
+
+}

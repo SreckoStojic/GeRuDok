@@ -1,0 +1,12 @@
+package state;
+
+import model.GraphSlot;
+
+public class SelectState extends State {
+	private GraphSlot slot;
+	
+	public SelectState(GraphSlot slot) {
+		this.slot=slot;
+	}
+
+}

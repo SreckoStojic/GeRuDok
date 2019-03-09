@@ -1,0 +1,160 @@
+package views;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
+
+import model.GraphSlot;
+import model.Page;
+import model.TextSlot;
+import observers.GeRuDokEvent;
+
+public class PageViewer extends JPanel implements Observer {
+	private Page page;
+	private ArrayList<TextSlotViewer> textSlotViewers = new ArrayList<TextSlotViewer>();
+	private ArrayList<GraphSlotViewer> graphSlotViewers = new ArrayList<GraphSlotViewer>();
+	JPanel panCentar = new JPanel();
+
+	public PageViewer(Page page) {
+		super(new BorderLayout());
+
+		this.page = page;
+		this.page.addObserver(this);
+
+		TitledBorder title = BorderFactory.createTitledBorder(page.toString());
+		title.setTitlePosition(4);
+		setBorder(title);
+		this.panCentar.setBackground(Color.WHITE);
+		JScrollPane sc = new JScrollPane(this.panCentar, 20, 30);
+		add(sc);
+	}
+
+	public Page getPage() {
+		return this.page;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+
+			this.panCentar.removeAll();
+
+			this.panCentar
+					.setLayout(new BoxLayout(panCentar, BoxLayout.Y_AXIS));
+			for (TextSlotViewer textSlotViewer : this.textSlotViewers) {
+				textSlotViewer.setPreferredSize(new Dimension(200, 200));
+
+				this.panCentar.add(textSlotViewer, "align center");
+			}
+			validate();
+			repaint();
+			for (TextSlotViewer textSlotViewer : this.textSlotViewers) {
+				textSlotViewer.update(null, null);
+			}
+
+			this.panCentar
+					.setLayout(new BoxLayout(panCentar, BoxLayout.Y_AXIS));
+			for (GraphSlotViewer graphSlotViewer : this.graphSlotViewers) {
+				graphSlotViewer.setPreferredSize(new Dimension(200, 200));
+
+				this.panCentar.add(graphSlotViewer, "align center");
+			}
+			validate();
+			repaint();
+			for (GraphSlotViewer graphSlotViewer : this.graphSlotViewers) {
+				graphSlotViewer.update(null, null);
+			}
+		
+		if (arg instanceof GeRuDokEvent) {
+			GeRuDokEvent ger = (GeRuDokEvent) arg;
+			if (ger.getObject() instanceof GraphSlot) {
+				GraphSlot graphSlot = (GraphSlot) ger.getObject();
+				for (GraphSlotViewer gsw : this.graphSlotViewers) {
+					if (graphSlot == gsw.getGraphSlot()) {
+						TitledBorder title = BorderFactory
+								.createTitledBorder(graphSlot.toString());
+						title.setTitlePosition(4);
+						gsw.setBorder(title);
+
+					}
+
+				}
+
+			}
+			if (ger.getObject() instanceof TextSlot) {
+				TextSlot textSlot = (TextSlot) ger.getObject();
+				for (TextSlotViewer tsw : this.textSlotViewers) {
+					if (textSlot == tsw.getTextSlot()) {
+						TitledBorder title = BorderFactory
+								.createTitledBorder(textSlot.toString());
+						title.setTitlePosition(4);
+						tsw.setBorder(title);
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	public void addTextViewer(TextSlotViewer textSlotViewer) {
+		this.textSlotViewers.add(textSlotViewer);
+		update(null, null);
+	}
+
+	public void addGraphSlotViewer(GraphSlotViewer graphSlotViewer) {
+		this.graphSlotViewers.add(graphSlotViewer);
+		update(null, null);
+	}
+
+	public void removeTextViewerForSlot(TextSlot textSlot) {
+		TextSlotViewer TextViewer = null;
+		for (TextSlotViewer textSlotViewerTemp : this.textSlotViewers) {
+			if (textSlotViewerTemp.getTextSlot().equals(textSlot)) {
+				TextViewer = textSlotViewerTemp;
+				break;
+			}
+		}
+		if (TextViewer != null) {
+			this.textSlotViewers.remove(TextViewer);
+			update(null, null);
+		}
+	}
+
+	public void removeGraphViewerForSlot(GraphSlot graphSlot) {
+		GraphSlotViewer GraphViewer = null;
+		for (GraphSlotViewer GraphSlotViewerTemp : this.graphSlotViewers) {
+			if (GraphSlotViewerTemp.getGraphSlot().equals(graphSlot)) {
+				GraphViewer = GraphSlotViewerTemp;
+				break;
+			}
+		}
+		if (GraphViewer != null) {
+			this.graphSlotViewers.remove(GraphViewer);
+			update(null, null);
+		}
+	}
+
+	public GraphSlotViewer getGraphSlotViewerForslot(GraphSlot graph) {
+		GraphSlotViewer graphSlotViewer = null;
+		for (GraphSlotViewer graphSlotViewerTemp : this.graphSlotViewers) {
+			if (graphSlotViewerTemp.getGraphSlot().equals(graph)) {
+				graphSlotViewer = graphSlotViewerTemp;
+				break;
+			}
+		}
+		return graphSlotViewer;
+	}
+
+}

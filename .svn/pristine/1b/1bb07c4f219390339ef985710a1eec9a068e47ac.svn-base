@@ -1,0 +1,68 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.SwingUtilities;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+
+public class Redo extends AbstractGerudokActions{
+	private GraphSlot slot;
+
+	public Redo(GraphSlot slot) {
+		this.slot = slot;
+		putValue("Name", MainFrame.getInstance().getResourceBundle().getString("miRedo"));
+		putValue("SmallIcon", loadIcon("images/redo.png"));
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		// MainFrame.getInstance().getCommandManager().undoCommand();
+		// System.out.println("ffsd");
+		/*
+		 * MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+		 * .getTree().getSelectionPath().getLastPathComponent(); if (node
+		 * instanceof Page){ DocumentViewer docw =
+		 * MainFrame.getInstance().getSelectedDocumentViewer(); PageViewer
+		 * pageviewer = docw.getPageViewerForPage((Page) node); for (int
+		 * i=0;i<node.getChildCount();i++) { if (((GraphSlot)
+		 * node.getChildAt(i)).isDesignMode()==true){ GraphSlotViewer
+		 * graph=pageviewer.getGraphSlotViewerForslot((GraphSlot)
+		 * node.getChildAt(i)); graph.getCommandManager().doCommand();
+		 * 
+		 * }
+		 * 
+		 * }
+		 * 
+		 * }
+		 * 
+		 * else if (node instanceof GraphSlot) { comand(node);
+		 * 
+		 * } else if (node instanceof CircleElement) { comand((MutableTreeNode)
+		 * node.getParent()); } else if (node instanceof RectangleElement) {
+		 * comand((MutableTreeNode) node.getParent()); }
+		 * 
+		 * // MainFrame.getInstance().getCommandManager().undoCommand();
+		 * 
+		 * }
+		 * 
+		 * public void comand(MutableTreeNode parent) { DocumentViewer docw =
+		 * MainFrame.getInstance().getSelectedDocumentViewer(); PageViewer
+		 * pageviewer = docw.getPageViewerForPage((Page) parent.getParent());
+		 * GraphSlotViewer graphSlotViewer =
+		 * pageviewer.getGraphSlotViewerForslot((GraphSlot) parent);
+		 * 
+		 * graphSlotViewer.getCommandManager().doCommand();
+		 */
+
+	
+		slot.getCommandManager().doCommand();
+		MainFrame.getInstance().getTree().updateUI();
+		SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getTree());
+
+	}
+
+}

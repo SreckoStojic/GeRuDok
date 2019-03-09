@@ -1,0 +1,104 @@
+package dialogs;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import mainFrame.MainFrame;
+import mainFrame.SlotToolbar;
+import model.GraphSlot;
+import elements.Element;
+
+public class GraphSlotContentViewer extends JDialog implements Observer {
+	private GraphSlot slot;
+
+	public GraphSlotContentViewer(GraphSlot slot) {
+		this.slot = slot;
+		this.slot.addObserver(this);
+		setTitle(slot.toString());
+		setSize(new Dimension(400, 400));
+		setLocationRelativeTo(MainFrame.getInstance());
+		setModal(true);
+
+		SlotViewerFramework slotViewerFramework = new SlotViewerFramework();
+		slotViewerFramework.setBackground(Color.WHITE);
+		add(slotViewerFramework, "Center");
+		SlotViewerController slotViewerController = new SlotViewerController();
+		slotViewerFramework.addMouseListener(slotViewerController);
+		
+		SlotToolbar slotToolbar = new SlotToolbar(slot);	
+		add(slotToolbar, "North");
+		//addWindowListener(new WindowControllerGraph());
+	}
+
+	class SlotViewerFramework extends JPanel  {
+	
+		SlotViewerFramework() {
+		}
+
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+
+			setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+			Graphics2D g2 = (Graphics2D) g;
+			for (int i = 0; i < slot.getChildCount(); i++) {
+				Element element = (Element) slot.getChildAt(i);
+				g2.setColor(Color.BLACK);
+
+				g2.setStroke(element.getStroke());
+				g2.draw(element.getShape());
+				g2.setPaint(element.getPaint());
+				g2.fill(element.getShape());
+			}
+
+			g2.setColor(Color.BLACK);
+			g2.setStroke(new BasicStroke(1.0F, 2, 2, 1.0F, new float[] { 3.0F,
+					6.0F }, 0.0F));
+
+		}
+	}
+
+	class SlotViewerController extends MouseAdapter {
+		SlotViewerController() {
+		}
+
+		public void mousePressed(MouseEvent e) {
+
+			GraphSlotContentViewer.this.slot.getStateManager()
+					.getCurrentState().mousePressed(e);
+
+		}
+
+	}
+
+	public void update(Observable o, Object arg) {
+		repaint();
+	}
+
+	/*class WindowControllerGraph extends WindowAdapter {
+
+		public void windowClosing(WindowEvent e) {
+			DocumentViewer documentviewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+
+			Page page = (Page) slot.getParent();
+			PageViewer pageviewer = documentviewer.getPageViewerForPage(page);
+			GraphSlotViewer gra = pageviewer.getGraphSlotViewerForslot(slot);
+			gra.getGraphSlot().setDesignMode(false);
+
+		}
+	}
+	*/
+
+}

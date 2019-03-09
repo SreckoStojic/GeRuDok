@@ -1,0 +1,28 @@
+package actions;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+import javax.swing.JOptionPane;
+
+import mainFrame.MainFrame;
+
+public class MyWindowListener extends WindowAdapter {
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		super.windowClosing(e);
+		if (JOptionPane.showConfirmDialog(
+				MainFrame.getInstance(),
+				MainFrame.getInstance().getResourceBundle()
+						.getString("miExitQuestion"),
+				MainFrame.getInstance().getResourceBundle()
+						.getString("confirmExit"), JOptionPane.YES_NO_OPTION) == 0) {
+			// System.exit(0);
+			e.getWindow().dispose();
+		}
+
+	}
+}

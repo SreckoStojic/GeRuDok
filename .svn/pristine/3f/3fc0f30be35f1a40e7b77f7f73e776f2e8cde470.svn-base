@@ -1,0 +1,63 @@
+package views;
+
+
+import java.awt.Component;
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+import elements.CircleElement;
+import elements.RectangleElement;
+
+public class TreeRendered extends DefaultTreeCellRenderer {
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
+				row, hasFocus);
+		if ((value instanceof Workspace)) {
+			setIcon(new ImageIcon("images/workspace.png"));
+		} else if ((value instanceof Project)) {
+			loadIcon("images/new-project.png");
+		} else if ((value instanceof Document)) {
+			loadIcon("images/new-document.png");
+		} else if ((value instanceof Page)) {
+			loadIcon("images/new-page.png");
+		} else if ((value instanceof TextSlot)) {
+			loadIcon("images/text-slot.png");
+		} else if ((value instanceof GraphSlot)) {
+			loadIcon("images/graphic-slot.png");
+		} else if ((value instanceof CircleElement))
+			loadIcon("images/circle1.png");
+		else if ((value instanceof RectangleElement))
+			loadIcon("images/rectangle1.png");
+		
+		
+
+		return this;
+
+	}
+	
+	public Icon loadIcon(String fileName)
+	  {
+	    URL imageURL = getClass().getClassLoader().getResource(fileName);
+	    Icon icon = null;
+
+	    if (imageURL != null)
+	      icon = new ImageIcon(imageURL);
+	    else {
+	      System.err.println("Resource not found: " + fileName);
+	    }
+
+	    return icon;
+	  }
+}

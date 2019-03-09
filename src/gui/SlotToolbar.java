@@ -1,0 +1,146 @@
+package gui;
+
+import java.util.ResourceBundle;
+
+import javax.swing.JToolBar;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import actions.ActionManager;
+import actions.CircleStateAction;
+import actions.DeleteElementAction;
+import actions.EditCopyAction;
+import actions.EditCutAction;
+import actions.EditPasteAction;
+import actions.RectangleStateAction;
+import actions.Redo;
+import actions.SelectStateAction;
+import actions.Undo;
+
+@SuppressWarnings("serial")
+public class SlotToolbar extends JToolBar {
+	 private ActionManager actionManager;
+	 private DeleteElementAction deleteElementAction;
+	 private EditCopyAction editCopyAction;
+	 private EditPasteAction editPasteAction;
+	 private EditCutAction editCutAction;
+	 private Undo undo;
+	 private Redo redo;
+	 private CircleStateAction circleStateAction;
+	 private SelectStateAction selectStateAction;
+	 private RectangleStateAction rectangleStateAction;
+	 
+	 public SlotToolbar(GraphSlot slot) {
+	
+		
+        SelectStateAction selectStateAction = new SelectStateAction(slot);
+        add(selectStateAction);
+        this.selectStateAction = selectStateAction;
+		
+		addSeparator();
+		CircleStateAction circleStateAction = new CircleStateAction(slot);
+		add(circleStateAction);
+		this.circleStateAction=circleStateAction;
+		
+		
+		RectangleStateAction rectangleStateAction = new RectangleStateAction(slot);
+		add(rectangleStateAction);
+		this.rectangleStateAction = rectangleStateAction;
+		
+		addSeparator();
+		DeleteElementAction de = new DeleteElementAction(slot);
+		de.setEnabled(false);
+		MainFrame.getInstance().getActionManager().setDeleteElementAction(de);
+		add(de);
+		deleteElementAction=de;
+
+		addSeparator();
+		EditCopyAction eca = new EditCopyAction(slot);
+		MainFrame.getInstance().getActionManager().setEditCopyAction(eca);
+		eca.setEnabled(false);
+		add(eca);
+	    editCopyAction = eca;
+		
+		EditCutAction ecuta = new EditCutAction(slot);
+		MainFrame.getInstance().getActionManager().setEditCutAction(ecuta);
+		ecuta.setEnabled(false);
+		add(ecuta);
+		editCutAction = ecuta;
+		
+		EditPasteAction epa = new EditPasteAction(slot);
+		MainFrame.getInstance().getActionManager().setEditPasteAction(epa);
+		add(epa);
+		editPasteAction = epa;
+		addSeparator();
+		
+		Undo undo = new Undo(slot);
+		MainFrame.getInstance().getActionManager().setUndoAction(undo);
+		undo.setEnabled(false);
+		add(undo);
+		this.undo = undo;
+		Redo redo = new Redo(slot);
+		MainFrame.getInstance().getActionManager().setRedoAction(redo);
+		redo.setEnabled(false);
+		
+		
+		
+		
+		
+
+		add(redo);
+		this.redo = redo;
+	 }
+	 public void init(){
+		ActionManager actionManager=MainFrame.getInstance().getActionManager();
+		actionManager.setDeleteElementAction(deleteElementAction);
+		actionManager.setEditCopyAction(editCopyAction);
+		actionManager.setEditCutAction(editCutAction);
+		actionManager.setEditPasteAction(editPasteAction);
+		actionManager.setUndoAction(undo);
+		actionManager.setRedoAction(redo);
+		actionManager.setCircleStateAction(circleStateAction);
+		actionManager.setSelectStateAction(selectStateAction);
+		actionManager.setRectangleStateAction(rectangleStateAction);;
+		
+		ResourceBundle resourceBundle = MainFrame.getInstance().getResourceBundle();
+		
+		actionManager.getDeleteElementAction().putValue("Name", resourceBundle.getString("miDelete"));
+		actionManager.getDeleteElementAction().putValue("ShortDescription", resourceBundle.getString("miDelete"));
+		
+		
+		actionManager.getEditCopyAction().putValue("Name", resourceBundle.getString("miCopy"));
+		actionManager.getEditCopyAction().putValue("ShortDescription", resourceBundle.getString("miCopy"));
+		
+		actionManager.getEditCutAction().putValue("Name", resourceBundle.getString("miCut"));
+		actionManager.getEditCutAction().putValue("ShortDescription", resourceBundle.getString("miCut"));
+		
+		actionManager.getEditPasteAction().putValue("Name", resourceBundle.getString("miPaste"));
+		actionManager.getEditPasteAction().putValue("ShortDescription", resourceBundle.getString("miPaste"));
+		
+		actionManager.getUndoAction().putValue("Name", resourceBundle.getString("miUndo"));
+		actionManager.getUndoAction().putValue("ShortDescription", resourceBundle.getString("miUndo"));
+		
+		actionManager.getRedoAction().putValue("Name", resourceBundle.getString("miRedo"));
+		actionManager.getRedoAction().putValue("ShortDescription", resourceBundle.getString("miRedo"));
+		
+		actionManager.getSelectStateAction().putValue("Name", resourceBundle.getString("miSelect"));
+		actionManager.getSelectStateAction().putValue("ShortDescription", resourceBundle.getString("miSelect"));
+		
+		actionManager.getRectangleStateAction().putValue("Name", resourceBundle.getString("Rectangle"));
+		actionManager.getRectangleStateAction().putValue("ShortDescription", resourceBundle.getString("Rectangle"));
+		
+		actionManager.getCircleStateAction().putValue("Name", resourceBundle.getString("Circle"));
+		actionManager.getCircleStateAction().putValue("ShortDescription", resourceBundle.getString("Circle"));
+	
+		 
+	 }
+	
+	
+	public ActionManager getActionManager() {
+		return actionManager;
+	}
+	public void setActionManager(ActionManager actionManager) {
+		this.actionManager = actionManager;
+	}
+
+}

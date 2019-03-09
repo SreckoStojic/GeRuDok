@@ -1,0 +1,22 @@
+package mainFrame;
+
+import javax.swing.JToolBar;
+
+import model.GraphSlot;
+import actions.CircleStateAction;
+import actions.RectangleStateAction;
+import actions.Redo;
+import actions.SelectStateAction;
+import actions.Undo;
+
+public class SlotToolbar extends JToolBar {
+	public SlotToolbar(GraphSlot slot) {
+		add(new SelectStateAction(slot));
+	    addSeparator();
+		add(new CircleStateAction(slot));
+		add(new RectangleStateAction(slot));
+		addSeparator();
+		add(MainFrame.getInstance().getActionManager().getUndoAction());
+		add(new Redo());
+	}
+}

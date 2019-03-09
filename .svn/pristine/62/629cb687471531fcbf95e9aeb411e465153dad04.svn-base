@@ -1,0 +1,374 @@
+package actions;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import elements.CircleElement;
+import elements.RectangleElement;
+
+@SuppressWarnings("serial")
+public class RenameAction extends AbstractGerudokActions {
+	public static boolean rename = true;
+
+	public RenameAction() {
+		putValue("Name", "Rename");
+		putValue("SmallIcon", loadIcon("images/textfield_rename.png"));
+		putValue("ShortDescription", "Rename selected element");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+	}
+
+	public void actionPerformed(ActionEvent e) {
+
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		RenameDialog renameDialog = new RenameDialog(MainFrame.getInstance(),
+				node);
+		if (node != null) {
+
+			if (node instanceof Project) {
+				RenameAction.rename = true;
+				while (rename) {
+					renameDialog.setVisible(true);
+					if (RenameDialog.getExit() != 0) {
+						if (!renameDialog.getNewName().equals("") && !renameDialog.getNewName().equals("TRASH")) {
+							if (renameDialog.getNewName().equals(
+									node.toString())) {
+								((Project) node).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+								break;
+							}
+
+							if (MainFrame.getInstance().getWorkspace()
+									.checkname(renameDialog.getNewName())) {
+								((Project) node).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+							} else {
+								JOptionPane.showMessageDialog(null, MainFrame
+										.getInstance().getResourceBundle()
+										.getString("mbox"));
+
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mName"));
+
+						}
+
+					}
+
+					RenameDialog.setExit(1);
+				}
+			} else if (node instanceof Document) {
+				RenameAction.rename = true;
+				while (rename) {
+					renameDialog.setVisible(true);
+					if (RenameDialog.getExit() != 0) {
+						if (!renameDialog.getNewName().equals("") ) {
+							if (renameDialog.getNewName().equals(
+									node.toString())) {
+								((Document) node).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+								break;
+							}
+
+							Project p = (Project) node.getParent();
+							if ((p.checkname(renameDialog.getNewName()))) {
+								((Document) node).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+							} else {
+								JOptionPane.showMessageDialog(null, MainFrame
+										.getInstance().getResourceBundle()
+										.getString("mbox"));
+
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mName"));
+
+						}
+					}
+					RenameDialog.setExit(1);
+				}
+			} else if (node instanceof Page) {
+				RenameAction.rename = true;
+				while (rename) {
+					renameDialog.setVisible(true);
+					if (RenameDialog.getExit() != 0) {
+						if (!renameDialog.getNewName().equals("")) {
+							if (renameDialog.getNewName().equals(
+									node.toString())) {
+								((Document) node.getParent()).setNamePage(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+								break;
+							}
+
+							Document d = (Document) node.getParent();
+							if ((d.checkname(renameDialog.getNewName()))) {
+								((Document) node.getParent()).setNamePage(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+							} else {
+								JOptionPane.showMessageDialog(null, MainFrame
+										.getInstance().getResourceBundle()
+										.getString("mbox"));
+
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mName"));
+
+						}
+					}
+
+					RenameDialog.setExit(1);
+				}
+			} else if (node instanceof GraphSlot) {
+				RenameAction.rename = true;
+				while (rename) {
+					renameDialog.setVisible(true);
+					if (RenameDialog.getExit() != 0) {
+						if (!renameDialog.getNewName().equals("")) {
+							if (renameDialog.getNewName().equals(
+									node.toString())) {
+								((Page) node.getParent()).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+								break;
+							}
+							Page p = (Page) node.getParent();
+							if (p.checkname(renameDialog.getNewName())) {
+								((Page) node.getParent()).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+							} else {
+								JOptionPane.showMessageDialog(null, MainFrame
+										.getInstance().getResourceBundle()
+										.getString("mbox"));
+
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mName"));
+
+						}
+
+					}
+					RenameDialog.setExit(1);
+				}
+
+			} else if (node instanceof TextSlot) {
+				RenameAction.rename = true;
+				while (rename) {
+					renameDialog.setVisible(true);
+					if (RenameDialog.getExit() != 0) {
+						if (!renameDialog.getNewName().equals("")) {
+							if (renameDialog.getNewName().equals(
+									node.toString())) {
+								((Page) node.getParent()).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+								break;
+							}
+
+							Page p = (Page) node.getParent();
+							if (p.checkname(renameDialog.getNewName())) {
+								((Page) node.getParent()).setName(
+										renameDialog.getNewName(), node);
+								RenameAction.rename = false;
+							} else {
+								JOptionPane.showMessageDialog(null, MainFrame
+										.getInstance().getResourceBundle()
+										.getString("mbox"));
+
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mName"));
+
+						}
+					}
+					RenameDialog.setExit(1);
+				}
+			} else if (node instanceof CircleElement) {
+				RenameAction.rename = true;
+				while (rename) {
+					renameDialog.setVisible(true);
+					if (RenameDialog.getExit() != 0) {
+						if (!renameDialog.getNewName().equals("")) {
+							if (renameDialog.getNewName().equals(
+									node.toString())) {
+								((CircleElement) node).setName(renameDialog
+										.getNewName());
+								RenameAction.rename = false;
+								break;
+							}
+
+						
+						GraphSlot gs = (GraphSlot) node.getParent();
+						if (gs.checkname(renameDialog.getNewName())) {
+							((CircleElement) node).setName(renameDialog
+									.getNewName());
+							RenameAction.rename = false;
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mbox"));
+
+						}
+					} else {
+						JOptionPane.showMessageDialog(null,
+								MainFrame.getInstance().getResourceBundle()
+										.getString("mName"));
+
+					}
+				}
+				RenameDialog.setExit(1);
+			}
+		}
+		 else if (node instanceof RectangleElement) {
+			RenameAction.rename = true;
+			while (rename) {
+				renameDialog.setVisible(true);
+				if (RenameDialog.getExit() != 0) {
+					if (!renameDialog.getNewName().equals("")) {
+						if (renameDialog.getNewName().equals(node.toString())) {
+							((RectangleElement) node).setName(renameDialog
+									.getNewName());
+							RenameAction.rename = false;
+							break;
+						}
+
+						GraphSlot gs = (GraphSlot) node.getParent();
+						if (gs.checkname(renameDialog.getNewName())) {
+							((RectangleElement) node).setName(renameDialog
+									.getNewName());
+							RenameAction.rename = false;
+						} else {
+							JOptionPane.showMessageDialog(null, MainFrame
+									.getInstance().getResourceBundle()
+									.getString("mbox"));
+
+						}
+					} else {
+						JOptionPane.showMessageDialog(null,
+								MainFrame.getInstance().getResourceBundle()
+										.getString("mName"));
+
+					}
+				}
+				RenameDialog.setExit(1);
+			}
+		 }
+
+	}
+
+		MainFrame.getInstance().getTree().updateUI();
+	}
+}
+
+@SuppressWarnings("serial")
+class RenameDialog extends JDialog {
+	JTextField textField = new JTextField();
+	private static int exit;
+
+	public RenameDialog(Frame parent, MutableTreeNode node) {
+		super(parent, MainFrame.getInstance().getResourceBundle()
+				.getString("miRename"), true);
+		setSize(new Dimension(310, 75));
+		setLayout(new BorderLayout());
+		setLocationRelativeTo(parent);
+		setModal(true);
+		setResizable(false);
+		JButton ok = new JButton(MainFrame.getInstance().getResourceBundle()
+				.getString("miOK"));
+		JPanel top = new JPanel();
+		this.textField.setText(node.toString());
+		this.textField.setPreferredSize(new Dimension(220, 40));
+		top.add(textField, BorderLayout.NORTH);
+		top.add(ok, BorderLayout.EAST);
+		add(top);
+		ok.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				setExit(1);
+				dispose();
+
+			}
+		});
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowClosing(e);
+				RenameAction.rename = false;
+				setExit(0);
+			}
+
+		});
+		textField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				super.keyPressed(arg0);
+				if (KeyEvent.VK_ENTER == arg0.getKeyCode()) {
+					setExit(1);
+					dispose();
+				}
+			}
+
+		});
+	}
+
+	public String getNewName() {
+		return this.textField.getText().trim();
+	}
+
+	public void setText(String name) {
+		this.textField.setText(name);
+	}
+
+	public static int getExit() {
+		return exit;
+	}
+
+	public static void setExit(int exit) {
+		RenameDialog.exit = exit;
+	}
+
+}

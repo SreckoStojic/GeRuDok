@@ -1,0 +1,70 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import model.Page;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+import elements.CircleElement;
+import elements.RectangleElement;
+
+public class Undo extends AbstractAction {
+
+	public Undo() {
+		putValue("Name", "Undo");
+		putValue("SmallIcon", new ImageIcon("images/undo.png"));
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		// System.out.println("ffgs");
+		
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		if (node instanceof Page){
+			DocumentViewer docw = MainFrame.getInstance().getSelectedDocumentViewer();
+			PageViewer pageviewer = docw.getPageViewerForPage((Page) node);
+			for (int i=0;i<node.getChildCount();i++)
+			{
+				if (((GraphSlot) node.getChildAt(i)).isDesignMode()==true){
+					GraphSlotViewer graph=pageviewer.getGraphSlotViewerForslot((GraphSlot) node.getChildAt(i));
+					graph.getCommandManager().undoCommand();
+					
+				}
+				
+			}
+
+		}
+
+		else if (node instanceof GraphSlot) {
+			comand(node);
+
+		} else if (node instanceof CircleElement) {
+			comand((MutableTreeNode) node.getParent());
+		} else if (node instanceof RectangleElement) {
+			comand((MutableTreeNode) node.getParent());
+		}
+
+		
+
+	}
+
+	public void comand(MutableTreeNode parent) {
+		DocumentViewer docw = MainFrame.getInstance().getSelectedDocumentViewer();
+		PageViewer pageviewer = docw.getPageViewerForPage((Page) parent.getParent());
+		GraphSlotViewer graphSlotViewer = pageviewer.getGraphSlotViewerForslot((GraphSlot) parent);
+
+		graphSlotViewer.getCommandManager().undoCommand();
+
+	}
+
+}

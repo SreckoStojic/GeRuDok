@@ -1,0 +1,97 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+import javax.swing.JFileChooser;
+import javax.swing.tree.DefaultTreeModel;
+
+import mainFrame.MainFrame;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+import serialization.ProjectFileFilter;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+import views.ProjectViewer;
+import views.TextSlotViewer;
+
+public class OpenProject implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JFileChooser jfc = new JFileChooser();
+		jfc.setFileFilter(new ProjectFileFilter());
+
+		if (jfc.showOpenDialog(MainFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
+			try {
+				ObjectInputStream os = new ObjectInputStream(
+						new FileInputStream(jfc.getSelectedFile()));
+
+				Project p = null;
+				try {
+					p = (Project) os.readObject();
+				} catch (ClassNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+
+				ProjectViewer prviewer = new ProjectViewer(p);
+
+				MainFrame.getInstance().getDesktopPane().add(prviewer);
+				for (int i = 0; i < p.getChildCount(); i++) {
+					prviewer.update(null, p.getDocument(i));
+					for (int j = 0; j < (p.getDocument(i)).getChildCount(); j++) {
+						Document doc = p.getDocument(i);
+						DocumentViewer docv = prviewer
+								.getDocumentViewerForDocument(p.getDocument(i));
+
+						PageViewer pageviewer = new PageViewer(doc.getPage(j));
+
+						docv.addPageViewer(pageviewer);
+						for (int k=0;k<p.getDocument(i).getPage(j).getChildCount();k++){
+							Page page =p.getDocument(i).getPage(j);
+							PageViewer pageviewerslot =docv.getPageViewerForPage(doc.getPage(j));
+							if (page.getChildAt(k)instanceof TextSlot){
+							TextSlotViewer tsw=new TextSlotViewer(page.getTextSlot(k));
+							pageviewerslot.addTextViewer(tsw);
+							}
+							if (page.getChildAt(k)instanceof GraphSlot){
+							GraphSlotViewer gsw=new GraphSlotViewer(page.getGraphSlot(k));
+							pageviewerslot.addGraphSlotViewer(gsw);
+							}
+							
+							
+						}
+					}
+
+				}
+
+				Workspace workspace = (Workspace) MainFrame.getInstance()
+						.getTree().getModel().getRoot();
+
+				workspace.addProject(p, workspace.getChildCount());
+
+				((DefaultTreeModel) MainFrame.getInstance().getTree()
+						.getModel()).reload();
+				
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+		}
+	}
+}
+
+
+

@@ -1,0 +1,26 @@
+package elements;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.Stroke;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+
+public class RectangleElement extends Element {
+	public RectangleElement(String name, GraphSlot parent, Point position,
+			Dimension dimension, Stroke stroke, Paint paint) {
+		super(name, parent, position, dimension, stroke, paint);
+
+		this.shape = new Rectangle2D.Double(position.getX(), position.getY(),
+				dimension.getWidth(), dimension.getHeight());
+	}
+
+}

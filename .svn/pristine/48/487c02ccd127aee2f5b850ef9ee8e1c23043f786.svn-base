@@ -1,0 +1,49 @@
+package state;
+
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import model.Page;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+
+import command.AddDeviceCommand;
+
+public class RectangleState extends State {
+	private GraphSlot slot;
+
+	public RectangleState(GraphSlot slot) {
+		this.slot = slot;
+	}
+
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == 1) {
+			Point position = e.getPoint();
+
+			/*
+			 * String name = "Rectangle " + (this.slot.getChildCount() + 1);
+			 * Point position = e.getPoint(); Dimension dimension = new
+			 * Dimension(75, 50); BasicStroke stroke = new BasicStroke(2.0F);
+			 * Paint paint = Color.WHITE; RectangleElement rectangle = new
+			 * RectangleElement(name, slot, position, dimension, stroke, paint);
+			 * this.slot.insert(rectangle, this.slot.getChildCount());
+			 */
+
+			DocumentViewer docw = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+			PageViewer pageviewer = docw.getPageViewerForPage((Page) slot
+					.getParent());
+
+			slot.getCommandManager().addCommand(
+					new AddDeviceCommand(slot, position, 2));
+			pageviewer.update(null, null);
+
+			MainFrame.getInstance().getTree().updateUI();
+
+		}
+
+	}
+}

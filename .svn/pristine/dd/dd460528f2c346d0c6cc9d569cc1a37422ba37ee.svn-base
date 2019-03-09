@@ -1,0 +1,32 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
+
+import mainFrame.AboutDialog;
+import mainFrame.MainFrame;
+
+public class AboutDialogAction extends AbstractGerudokActions {
+
+	public AboutDialogAction(){
+		// TODO Auto-generated constructor stub
+	  
+		putValue("Name", MainFrame.getInstance().getResourceBundle().getString("miAbout"));
+	    putValue("SmallIcon", loadIcon("images/info-logo.png"));
+	    putValue("ShortDescription", MainFrame.getInstance().getResourceBundle().getString("miAbout"));
+	    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+	    
+	}
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AboutDialog aboutDialog = new AboutDialog(MainFrame.getInstance());
+			aboutDialog.setVisible(true);
+			
+		}	
+		
+}
+
+

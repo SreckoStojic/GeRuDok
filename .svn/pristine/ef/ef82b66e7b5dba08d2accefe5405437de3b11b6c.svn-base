@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>GeRuDok</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>images/Serbia-Flag-icon.png</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/workspace/GeRuDok/images/Serbia-Flag-icon.png</locationURI>
+		</link>
+		<link>
+			<name>images/eng-flag.png</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/workspace/GeRuDok/images/eng-flag.png</locationURI>
+		</link>
+		<link>
+			<name>images/rename.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/rename.png</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

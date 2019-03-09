@@ -1,0 +1,115 @@
+package views;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
+
+import observers.GeRuDokEvent;
+import mainFrame.MainFrame;
+import model.Document;
+import model.Page;
+
+public class DocumentViewer extends JPanel implements Observer {
+	private ArrayList<PageViewer> pageViewers = new ArrayList<PageViewer>();
+	private Document document;
+
+	JPanel panCentar = new JPanel();
+
+	public DocumentViewer(Document aDocument) {
+		super(new BorderLayout());
+		this.document = aDocument;
+		this.document.addObserver(this);
+		this.panCentar.setBackground(Color.BLACK);
+		JScrollPane sc = new JScrollPane(this.panCentar, 20, 30);
+		add(sc);
+	}
+
+	public Document getDocument() {
+		return this.document;
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		if (arg == null) {
+
+			this.panCentar.removeAll();
+
+			this.panCentar
+					.setLayout(new BoxLayout(panCentar, BoxLayout.Y_AXIS));
+			for (PageViewer pageViewer : this.pageViewers) {
+				pageViewer.setPreferredSize(new Dimension(200, 200));
+
+				this.panCentar.add(pageViewer, "align center");
+			}
+			validate();
+			repaint();
+			for (PageViewer pageViewer : this.pageViewers) {
+				pageViewer.update(null, null);
+			}
+		}
+		if (arg instanceof GeRuDokEvent) {
+
+			GeRuDokEvent ger = (GeRuDokEvent) arg;
+			int operation = ger.getOperation();
+			if (operation == 3) {
+				Page page = (Page) ger.getObject();
+				String[] s = page.toString().split(" ");
+				for (PageViewer pw : this.pageViewers) {
+					if (page == pw.getPage()) {
+						TitledBorder title = BorderFactory.createTitledBorder(MainFrame.getInstance().getResourceBundle().getString("Page")	+ " " + s[1].toString());
+						title.setTitlePosition(4);
+						pw.setBorder(title);
+					}
+
+				}
+			}
+		}
+
+	}
+
+	public void addPageViewer(PageViewer pageViewer) {
+		this.pageViewers.add(pageViewer);
+		update(null, null);
+
+	}
+
+	public PageViewer getPageViewerForPage(Page page) {
+		PageViewer pageViewer = null;
+		for (PageViewer pageViewerTemp : this.pageViewers) {
+			if (pageViewerTemp.getPage().equals(page)) {
+				pageViewer = pageViewerTemp;
+				break;
+			}
+		}
+		return pageViewer;
+	}
+
+	public void removePageViewerForPage(Page page) {
+		PageViewer pageViewer = null;
+		for (PageViewer pageViewerTemp : this.pageViewers) {
+			if (pageViewerTemp.getPage().equals(page)) {
+				pageViewer = pageViewerTemp;
+				break;
+			}
+		}
+		if (pageViewer != null) {
+			this.pageViewers.remove(pageViewer);
+			update(null, null);
+		}
+	}
+
+}

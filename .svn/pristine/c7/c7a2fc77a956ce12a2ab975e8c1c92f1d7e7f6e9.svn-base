@@ -1,0 +1,66 @@
+package actions;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JInternalFrame;
+import javax.swing.KeyStroke;
+
+import mainFrame.MainFrame;
+
+@SuppressWarnings("serial")
+public class TileVer extends AbstractGerudokActions {
+
+	public TileVer() {
+		// TODO Auto-generated constructor stub
+
+		putValue("Name",
+				MainFrame.getInstance().getResourceBundle()
+						.getString("miTileV"));
+		putValue("SmallIcon", loadIcon("images/tile-v.png"));
+		putValue("ShortDescription", MainFrame.getInstance()
+				.getResourceBundle().getString("miTileV"));
+		putValue(ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.ALT_MASK));
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		tileVer();
+	}
+
+	private void tileVer() {
+		JInternalFrame[] activatedInternalFrames = MainFrame.getInstance()
+				.getDesktopPane().getAllFrames();
+		int numberOfActivated = activatedInternalFrames.length;
+		int numberOfVisible = 0;
+
+		for (int i = 0; i < numberOfActivated; i++) {
+			if (activatedInternalFrames[i].isVisible() == true)
+				numberOfVisible++;
+		}
+
+		if (numberOfVisible == 0)
+			return;
+
+		Dimension dimensionOfDesktopPane = MainFrame.getInstance()
+				.getDesktopPane().getSize();
+		int newWidth = dimensionOfDesktopPane.width / numberOfVisible;
+		int newHeight = dimensionOfDesktopPane.height;
+
+		int j = 0;
+		for (int i = 0; i < numberOfActivated; i++) {
+			if (activatedInternalFrames[numberOfActivated - 1 - i].isVisible() == true) {
+				activatedInternalFrames[numberOfActivated - 1 - i].setSize(
+						newWidth, newHeight);
+				activatedInternalFrames[numberOfActivated - 1 - i].setLocation(
+						j * newWidth, 0);
+				j++;
+			}
+		}
+	}
+
+}

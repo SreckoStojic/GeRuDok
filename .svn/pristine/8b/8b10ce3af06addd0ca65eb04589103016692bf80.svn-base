@@ -1,0 +1,122 @@
+package mainFrame;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.Action;
+import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+import views.ProjectViewer;
+import actions.DeleteItem;
+
+public class TreeWithListener extends JTree implements TreeSelectionListener {
+	
+	Workspace workspace = new Workspace();
+	
+	public TreeWithListener(Workspace workspace) {
+		super(workspace);
+		addTreeSelectionListener(this);
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		if (e.getNewLeadSelectionPath() != null) {
+			TreeNode node = (TreeNode) e.getNewLeadSelectionPath()
+					.getLastPathComponent();
+			if (node instanceof Project) {
+				MainFrame.getInstance().selectInternalFrame(node);
+			} else if (node instanceof Document) {
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(node.getParent());
+				projectViewer.setDocumentTab(node);
+			}else if (node instanceof Page ){
+				TreeNode nodep=node.getParent().getParent();
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(nodep);
+				projectViewer.setDocumentTab(node.getParent());
+				MainFrame.getInstance().selectInternalFrame(nodep);
+			
+			}else if (node instanceof TextSlot){
+				TreeNode nodep=node.getParent().getParent().getParent();
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(nodep);
+				projectViewer.setDocumentTab(node.getParent().getParent());
+				MainFrame.getInstance().selectInternalFrame(nodep);
+				
+			}else if (node instanceof GraphSlot){
+				TreeNode nodep=node.getParent().getParent().getParent();
+				ProjectViewer projectViewer = MainFrame.getInstance()
+						.selectInternalFrame(nodep);
+				projectViewer.setDocumentTab(node.getParent().getParent());
+				MainFrame.getInstance().selectInternalFrame(nodep);
+				
+			}
+			
+		}
+	}
+	public void refresh() {
+	    SwingUtilities.updateComponentTreeUI(this);
+	}
+	
+	 private class TreeMouseAdapter
+	    extends MouseAdapter
+	  {
+	    public TreeMouseAdapter() {}
+	    
+	    private void myPopupEvent(MouseEvent e)
+	    {
+	      int x = e.getX();
+	      int y = e.getY();
+	      JTree tree = (JTree)e.getSource();
+	      TreePath path = tree.getPathForLocation(x, y);
+	      if (path == null) {
+	        return;
+	      }
+	      tree.setSelectionPath(path);
+	      
+	      MutableTreeNode obj = (MutableTreeNode)path.getLastPathComponent();
+	      JPopupMenu popup = new JPopupMenu();
+	      if (obj instanceof GraphSlot){
+	    	  popup.add((Action) new DeleteItem());
+	      }
+	      
+	      
+	      
+	      popup.show(tree, x, y);
+	    }
+	    
+	    public void mousePressed(MouseEvent e)
+	    {
+	      if (e.isPopupTrigger()) {
+	        myPopupEvent(e);
+	      }
+	    }
+	    
+	    public void mouseReleased(MouseEvent e)
+	    {
+	      if (e.isPopupTrigger()) {
+	        myPopupEvent(e);
+	      }
+	    }
+	  }
+	 
+	 public Workspace getRoot(){
+		 return this.workspace;
+	 }
+	 
+	 
+	 
+}

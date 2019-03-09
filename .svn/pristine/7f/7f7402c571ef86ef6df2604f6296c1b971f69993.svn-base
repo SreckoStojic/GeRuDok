@@ -1,0 +1,88 @@
+
+Circle = Krug
+
+Document = Dokument
+
+GraphSlot = Grafi\u010Dko Polje
+
+Page = Stranica
+
+Project = Projekat
+
+Rectangle = Pravougaonik
+
+TextSlot = Tekstualno Polje
+
+Workspace = Radna povr\u0161ina
+
+mbEdit = Izmeni
+
+mbHelp = Pomo\u0107
+
+mbLanguage = Jezik
+
+mbProject = Projekat
+
+mbSettings = Pode\u0161avanja
+
+mbWindow = Prozor\r\n
+
+miAbout = O autorima
+
+miCHorizontaly = Horizontalne kaskade
+
+miDelete = Obri\u0161i
+
+miEnglish = Engleski
+
+miLooknFeel = Izgled forme
+
+miNewDocument = Novi Dokument
+
+miNewGS = Novo Grafi\u010Dko Polje
+
+miNewPage = Nova Stranica
+
+miNewProject = Novi Projekat
+
+miNewTS = Novo Tekstualno Polje
+
+miOpenProject = Otvori Projekat
+
+miSaveProject = Snimi Projekat
+
+miSerbian = Srpski - Latinica
+
+miTileH = Horizontalne plo\u010Dice
+
+miTileV = Vertikalne plo\u010Dice
+
+miSerbianCyrillic = Srpski - \u0106irilica
+
+miNimbus = Nimbus
+
+titleName = GeRuDok tim 9-6
+
+langStatusBar = Jezik: Srpski - latinica
+
+milos = Milo\u0161 Gagovi\u0107
+
+srecko = Sre\u0107ko Stoji\u0107
+
+closeAbout = Zatvori
+
+aboutTitle = O autorima
+
+okAbout = Ok
+
+tim96 = Tim 9-6
+
+aboutMilos =  Ime: Milo\u0161\nPrezime: Gagovi\u0107\nMail: gagovicmilosgagovic@gmail.com\nBroj indeksa: RA18/2013
+
+aboutSrecko =  Ime: Sre\u0107ko\nPrezime: Stoji\u0107\nMail: stojic.srecko@gmail.com\nBroj indeksa: RA15/2012
+
+aboutTooltip = O autorima tima 9-6
+
+miRename = Preimenuj
+
+mbox = Ime je ve\u0107 u upotrebi

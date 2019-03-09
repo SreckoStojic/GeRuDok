@@ -1,0 +1,62 @@
+package command;
+
+import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+
+import dialogs.GraphSlotContentViewer;
+import mainFrame.MainFrame;
+import mainFrame.SlotToolbar;
+
+public class CommandManager {
+
+	private ArrayList<AbstractCommand> commands = new ArrayList<AbstractCommand>();
+
+	private int currentCommand = 0;
+
+	public void addCommand(AbstractCommand command) {
+		SlotToolbar sb = MainFrame.getInstance().getSb();
+		ArrayList<AbstractAction> list = sb.getLista();
+
+		while (currentCommand < commands.size())
+			commands.remove(currentCommand);
+		commands.add(command);
+		currentCommand++;
+		list.get(0).setEnabled(true);
+		 
+	}
+
+	public void doCommand() {
+		SlotToolbar sb = MainFrame.getInstance().getSb();
+		ArrayList<AbstractAction> list = sb.getLista();
+
+		if (currentCommand < commands.size()) {
+			commands.get(currentCommand++).doCommand();
+
+			list.get(0).setEnabled(true);
+			System.out.println(currentCommand);
+		}
+		if (currentCommand == commands.size()) {
+
+			list.get(1).setEnabled(false);
+		}
+	}
+
+	public void undoCommand() {
+		SlotToolbar sb = MainFrame.getInstance().getSb();
+		ArrayList<AbstractAction> list = sb.getLista();
+
+		if (currentCommand > 0) {
+
+			list.get(1).setEnabled(true);
+
+			commands.get(--currentCommand).undoCommand();
+			System.out.println(currentCommand);
+		}
+		if (currentCommand == 0) {
+
+			list.get(0).setEnabled(false);
+		}
+	}
+
+}

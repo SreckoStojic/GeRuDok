@@ -1,0 +1,51 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import model.Page;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+import views.ProjectViewer;
+
+@SuppressWarnings("serial")
+public class NewGraphicSlot extends AbstractGerudokActions  {
+	public NewGraphicSlot() {
+		putValue("SmallIcon", loadIcon("images/graphic-slot.png"));
+		putValue("Name", "New GraphicSlot");
+		putValue("ShortDescription", "New GraphicSlot");
+		putValue(ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		ProjectViewer projectViewer = (ProjectViewer) MainFrame.getInstance().getDesktopPane().getSelectedFrame();
+		if ((node instanceof Page)) {
+			Page page = (Page) node;
+			String name = MainFrame.getInstance().getResourceBundle()
+					.getString("GraphSlot");
+			GraphSlot graphSlot = new GraphSlot(page, name + " "
+					+ (node.getChildCount() + 1));
+			node.insert(graphSlot, (node.getChildCount()));
+
+			GraphSlotViewer graphSlotViewer = new GraphSlotViewer(graphSlot);
+			DocumentViewer documentViewer = projectViewer.getSelectedDocumentViewer();
+
+			PageViewer pageViewer = (PageViewer) documentViewer
+					.getPageViewerForPage(page);
+			pageViewer.addGraphSlotViewer(graphSlotViewer);
+
+			MainFrame.getInstance().getTree().updateUI();
+		}
+	}
+}

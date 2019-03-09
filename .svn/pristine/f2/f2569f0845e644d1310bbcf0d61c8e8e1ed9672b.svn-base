@@ -1,0 +1,126 @@
+package actions;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JDialog;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+import elements.CircleElement;
+import elements.RectangleElement;
+
+public class RenameAction extends AbstractGerudokActions {
+	public RenameAction() {
+		putValue("Name", "Rename");
+		putValue("SmallIcon", loadIcon("images/rename.png"));
+		putValue("ShortDescription", "Rename selected element");
+		putValue(ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		/*
+		 * TreeWithListener tree = MainFrame.getInstance().getTree(); TreePath
+		 * path = tree.getSelectionPath(); MutableTreeNode node =
+		 * (MutableTreeNode) MainFrame.getInstance()
+		 * .getTree().getSelectionPath().getLastPathComponent();
+		 * 
+		 * 
+		 * if (path != null) tree.startEditingAtPath(path);
+		 */
+
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		RenameDialog renameDialog = new RenameDialog(MainFrame.getInstance(),
+				node);
+		if (node != null) {
+			
+			if (node instanceof Workspace){
+				renameDialog.setVisible(true);
+				((Workspace) node).setName(renameDialog.getNewName());
+				
+			} else if (node instanceof Project) {
+
+				renameDialog.setVisible(true);
+				((Project) node).setName(renameDialog.getNewName(),node);
+			} else if (node instanceof Document) {
+
+				renameDialog.setVisible(true);
+				((Document) node).setName(renameDialog.getNewName(), node);
+			} else if (node instanceof Page) {
+
+				renameDialog.setVisible(true);
+				( (Document)node.getParent()).setNamePage(renameDialog.getNewName(),node);
+			} else if (node instanceof GraphSlot) {
+
+				renameDialog.setVisible(true);
+				((Page) node.getParent()).setName(renameDialog.getNewName(),node);
+
+			} else if (node instanceof TextSlot) {
+
+				renameDialog.setVisible(true);
+				((Page) node.getParent()).setName(renameDialog.getNewName(),node);
+			} else if (node instanceof CircleElement) {
+
+				renameDialog.setVisible(true);
+				((CircleElement) node).setName(renameDialog.getNewName());
+			} else if (node instanceof RectangleElement) {
+
+				renameDialog.setVisible(true);
+				((RectangleElement) node).setName(renameDialog.getNewName());
+
+			}
+
+		}
+		MainFrame.getInstance().getTree().updateUI();
+	}
+}
+
+class RenameDialog extends JDialog {
+	JTextField textField = new JTextField();
+
+	public RenameDialog(Frame parent, MutableTreeNode node) {
+		super(parent,MainFrame.getInstance().getResourceBundle().getString("miRename"), true);
+		setSize(new Dimension(350, 70));
+		setLayout(new BorderLayout());
+		setLocationRelativeTo(parent);
+		setModal(true);
+		//this.textField.setLineWrap(true);
+		this.textField.setText(node.toString());
+		this.textField.setPreferredSize(new Dimension(350, 70));
+		add(textField);
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+
+			}
+
+		});
+
+	}
+
+	public String getNewName() {
+		return this.textField.getText();
+	}
+
+	public void setText(String name) {
+		this.textField.setText(name);
+	}
+
+}

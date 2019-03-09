@@ -1,0 +1,46 @@
+package views;
+
+import java.awt.Component;
+import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+
+import elements.CircleElement;
+import elements.RectangleElement;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Workspace;
+
+public class TreeRendered extends DefaultTreeCellRenderer {
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
+				row, hasFocus);
+		if ((value instanceof Workspace)) {
+			setIcon(new ImageIcon("images/workspace.png"));
+		} else if ((value instanceof Project)) {
+			setIcon(new ImageIcon("images/new-project.png"));
+		} else if ((value instanceof Document)) {
+			setIcon(new ImageIcon("images/new-document.png"));
+		} else if ((value instanceof Page)) {
+			setIcon(new ImageIcon("images/new-page.png"));
+		} else if ((value instanceof TextSlot)) {
+
+			setIcon(new ImageIcon("images/text-slot.png"));
+		} else if ((value instanceof GraphSlot)) {
+			setIcon(new ImageIcon("images/graphic-slot.png"));
+		} else if ((value instanceof CircleElement))
+			setIcon(new ImageIcon("images/circle1.png"));
+		else if ((value instanceof RectangleElement))
+			setIcon(new ImageIcon("images/rectangle1.png"));
+
+		return this;
+
+	}
+}

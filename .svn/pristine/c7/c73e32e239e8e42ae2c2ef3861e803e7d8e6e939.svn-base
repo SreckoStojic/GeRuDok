@@ -1,0 +1,44 @@
+package actions;
+
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.net.URL;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import model.GraphSlot;
+
+public class SelectStateAction extends AbstractAction {
+	private GraphSlot slot;
+
+	public SelectStateAction(GraphSlot slot) {
+		this.slot = slot;
+
+		putValue("SmallIcon", loadIcon("images/select1.png"));
+		putValue("Name", "Select element");
+		putValue("ShortDescription", "Select element");
+		
+
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		this.slot.startSelectState();
+	
+		
+
+	}
+
+	public Icon loadIcon(String fileName) {
+		URL imageURL = getClass().getClassLoader().getResource(fileName);
+		Icon icon = null;
+		if (imageURL != null) {
+			icon = new ImageIcon(imageURL);
+		} else {
+			System.err.println("Resource not found: " + fileName);
+		}
+		return icon;
+	}
+
+}

@@ -1,0 +1,226 @@
+package mainFrame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
+import actions.AboutDialogAction;
+import actions.CascadeHor;
+import actions.DeleteItem;
+import actions.NewDocument;
+import actions.NewGraphicSlot;
+import actions.NewPage;
+import actions.NewProject;
+import actions.NewTextSlot;
+import actions.OpenProject;
+import actions.SaveProject;
+import actions.TileHor;
+import actions.TileVer;
+
+public class MenuBar extends JMenuBar {
+	private ArrayList<JMenuItem> menulist=new ArrayList<>();
+
+	public MenuBar() {
+
+		JMenu project = new JMenu("Project");
+		project.setMnemonic('P');
+
+		JMenuItem miNewProject = new JMenuItem("New project");
+		
+		miNewProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+				ActionEvent.CTRL_MASK));
+		miNewProject.setIcon(new ImageIcon("images/new-project.png"));
+		miNewProject.addActionListener(new NewProject());
+		this.menulist.add(miNewProject);  //dodavanje u listu itema radi enable/dislable
+		project.add(miNewProject);
+
+		
+		JMenuItem miNewDocument = new JMenuItem("New document");
+		miNewDocument.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+				ActionEvent.CTRL_MASK));
+		miNewDocument.setIcon(new ImageIcon("images/new-document.png"));
+		miNewDocument.addActionListener(new NewDocument());
+		miNewDocument.setEnabled(false);
+		this.menulist.add(miNewDocument);
+		project.add(miNewDocument);
+
+		JMenuItem miNewPage = new JMenuItem("New page");
+		
+		miNewPage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				ActionEvent.ALT_MASK));
+		miNewPage.setIcon(new ImageIcon("images/new-page.png"));
+		miNewPage.addActionListener(new NewPage());
+		miNewPage.setEnabled(false);
+		this.menulist.add(miNewPage);
+		project.add(miNewPage);
+
+		project.addSeparator();
+
+		JMenuItem miNewGraphicSlot = new JMenuItem("New graphic slot");
+		
+		miNewGraphicSlot.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
+				ActionEvent.CTRL_MASK));
+		miNewGraphicSlot.setIcon(new ImageIcon("images/graphic-slot.png"));
+		miNewGraphicSlot.addActionListener(new NewGraphicSlot());
+		miNewGraphicSlot.setEnabled(false);
+		this.menulist.add(miNewGraphicSlot);
+		project.add(miNewGraphicSlot);
+
+		JMenuItem miNewTextSlot = new JMenuItem("New text slot");
+		
+		miNewTextSlot.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
+				ActionEvent.CTRL_MASK));
+		miNewTextSlot.setIcon(new ImageIcon("images/text-slot.png"));
+		miNewTextSlot.addActionListener(new NewTextSlot());
+		miNewTextSlot.setEnabled(false);
+		this.menulist.add(miNewTextSlot);
+		project.add(miNewTextSlot);
+		
+		project.addSeparator();
+		
+		JMenuItem miSaveProject = new JMenuItem("Save project");
+		miSaveProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
+		miSaveProject.setIcon(new ImageIcon("images/save.png"));
+		miSaveProject.addActionListener(new SaveProject());
+		miSaveProject.setEnabled(false);
+		this.menulist.add(miSaveProject);
+		project.add(miSaveProject);
+		
+		JMenuItem miOpenProject = new JMenuItem("Open project");
+		miOpenProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,ActionEvent.CTRL_MASK));
+		miOpenProject.setIcon(new ImageIcon("images/open.png"));
+		miOpenProject.addActionListener(new OpenProject());
+		project.add(miOpenProject);
+		
+		//edit
+		
+		JMenu edit = new JMenu("Edit");
+		edit.setMnemonic(KeyEvent.VK_E);
+		
+		JMenuItem miDelete = new JMenuItem("Delete");
+		miDelete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+				ActionEvent.ALT_MASK));
+		miDelete.setIcon(new ImageIcon("images/delete-icon.png"));
+		miDelete.addActionListener(new DeleteItem());
+		miDelete.setEnabled(false);
+		this.menulist.add(miDelete);
+		edit.add(miDelete);
+		
+		
+		//window
+		
+		JMenu window = new JMenu("Window");
+		window.setMnemonic(KeyEvent.VK_W);
+
+		JMenuItem miCascadeHorizontally = new JMenuItem("Cascade horizontally");
+		miCascadeHorizontally.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		miCascadeHorizontally.setIcon(new ImageIcon("images/cascade-view.png"));
+		miCascadeHorizontally.addActionListener(new CascadeHor());
+		window.add(miCascadeHorizontally);
+
+		JMenuItem miTileHorizontally = new JMenuItem("Tile horizontally");
+		miTileHorizontally.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
+				ActionEvent.ALT_MASK));
+		miTileHorizontally.setIcon(new ImageIcon("images/tile-h.png"));
+		miTileHorizontally.addActionListener(new TileHor());
+		window.add(miTileHorizontally);
+
+		JMenuItem miTileVertically = new JMenuItem("Tile vertically");
+		miTileVertically.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
+				ActionEvent.ALT_MASK));
+		miTileVertically.setIcon(new ImageIcon("images/tile-v.png"));
+		miTileVertically.addActionListener(new TileVer());
+		window.add(miTileVertically);
+
+
+		JMenu settings = new JMenu("Settings");
+		settings.setMnemonic(KeyEvent.VK_S);
+	
+		JMenu miLookAndFeel = new JMenu("Look and feel");
+		
+		miLookAndFeel.setMnemonic('l');
+		/*
+		JMenuItem jma=new JMenuItem("Metal");
+		jma.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainFrame.LOOKANDFEEL="Metal";
+				MainFrame.THEME="Ocean";
+				MainFrame.initLookAndFeel();
+				
+			}
+		});
+		miLookAndFeel.add(jma);*/
+		
+		JMenuItem jmaS=new JMenuItem("Nimbus");
+		jmaS.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				MainFrame.LOOKANDFEEL="Nimbus";
+				MainFrame.initLookAndFeel();
+			
+				
+			}
+		});
+		    
+		miLookAndFeel.add(jmaS);
+			
+		/*JMenuItem ja=new JMenuItem("Windows");
+		
+		miLookAndFeel.add(ja);
+		ja.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainFrame.LOOKANDFEEL="Windows";
+				MainFrame.initLookAndFeel();
+					
+			}
+		});*/
+	
+		
+			
+		miLookAndFeel.setIcon(new ImageIcon("images/looknfeel-icon.png"));
+	
+		settings.add(miLookAndFeel);
+		
+
+
+		JMenu help = new JMenu("Help");
+		help.setMnemonic(KeyEvent.VK_H);
+
+		JMenuItem miAbout = new JMenuItem("About");
+		miAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+				ActionEvent.CTRL_MASK));
+		miAbout.setIcon(new ImageIcon("images/info-logo.png"));
+		miAbout.addActionListener(new AboutDialogAction());
+		help.add(miAbout);
+
+		add(project);
+		add(edit);
+		add(window);
+		add(settings);
+		add(help);
+	}
+
+	public ArrayList<JMenuItem> getMenulist() {
+		return menulist;
+	}
+
+	public void setMenulist(ArrayList<JMenuItem> menulist) {
+		this.menulist = menulist;
+	}
+
+}

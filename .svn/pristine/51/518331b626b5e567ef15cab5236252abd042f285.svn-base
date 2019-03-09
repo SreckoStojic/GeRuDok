@@ -1,0 +1,23 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import model.GraphSlot;
+
+@SuppressWarnings("serial")
+public class RectangleStateAction extends AbstractGerudokActions {
+	private GraphSlot slot;
+
+	public RectangleStateAction(GraphSlot slot) {
+		this.slot = slot;
+
+		putValue("SmallIcon", loadIcon("images/rectangle1.png"));
+		putValue("Name", "Rectangle element");
+		putValue("ShortDescription", "Rectangle element");
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		this.slot.startRectangleState();
+	}
+
+}

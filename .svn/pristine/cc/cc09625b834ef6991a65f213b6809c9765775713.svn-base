@@ -1,0 +1,128 @@
+
+Circle = Circle
+
+Document = Document
+
+GraphSlot = GraphSlot
+
+Page = Page
+
+Project = Project
+
+Rectangle = Rectangle
+
+TextSlot = TextSlot
+
+Workspace = Workspace
+
+aboutMilos = Ime: Milos\nPrezime: Gagovic \nMail: gagovicmilosgagovic@gmail.com\nBroj indeksa: RA18/2013
+
+aboutSrecko = Ime: Srecko\nPrezime: Stojic\nMail: stojic.srecko@gmail.com\nBroj indeksa: RA15/2012
+
+aboutTitle = About
+
+aboutTooltip = About Team 9-6
+
+closeAbout = close
+
+confirmExit = Confirm exit
+
+langStatusBar = Language: English
+
+mName = Invalid name
+
+mbEdit = Edit
+
+mbHelp = Help
+
+mbLanguage = Language
+
+mbProject = Project
+
+mbSettings = Settings
+
+mbWindow = Window
+
+mbox = Name is already in use
+
+miAbout = About
+
+miCHorizontaly = Cascade horizontally
+
+miDelete = Delete
+
+miEnglish = English
+
+miExit = Exit
+
+miExitQuestion = Are you sure you want to exit?
+
+miLooknFeel = Look and feel
+
+miMessage = Message
+
+miNewDocument = New Document
+
+miNewGS = New GraphicSlot
+
+miNewPage = NewPage
+
+miNewProject = NewProject
+
+miNewTS = New TextSlot
+
+miNimbus = Nimbus
+
+miOK = Ok
+
+miOpenProject = Open Project
+
+miRename = Rename
+
+miSaveProject = Save Project
+
+miSerbian = Serbian - Latinic
+
+miSerbianCyrillic = Serbian - Cyrillic
+
+miTileH = Tile horizontally
+
+miTileV = Tile vertically
+
+milos = Milos Gagovic (C)
+
+no = No
+
+okAbout = Ok
+
+srecko = Srecko Stojic
+
+tim96 = Team 9-6
+
+titleName = GeRuDok team 9-6
+
+yes = Yes
+
+miCopy = Copy
+
+miCut = Cut
+
+miPaste = Paste
+
+miSelect = Select element
+
+miUndo = Undo
+
+miRedo = Redo
+
+mOperation = This operation my only be done within the framework is in the same document.
+
+miGridView = Grid view
+
+emptyTrash = Empty trash
+
+restore = Restore
+
+emptyTrashQuestion = Do you want to move project into TRASH? \u000A \u000A Yes - Move to TRASH \u000A No - Delete
+
+trash = Trash

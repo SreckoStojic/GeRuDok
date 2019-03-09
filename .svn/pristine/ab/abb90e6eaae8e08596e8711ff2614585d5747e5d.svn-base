@@ -1,0 +1,38 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import model.Page;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+
+public class NewGraphicSlot implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		if ((node instanceof Page)) {
+			Page page = (Page) node;
+			GraphSlot graphSlot = new GraphSlot(page, "GraphSlot " + (node.getChildCount()+1));
+			node.insert(graphSlot, (node.getChildCount()));
+
+			GraphSlotViewer graphSlotViewer = new GraphSlotViewer(graphSlot);
+			DocumentViewer documentViewer = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+			
+
+			PageViewer pageViewer = (PageViewer)documentViewer.getPageViewerForPage(page);
+			pageViewer.addGraphSlotViewer(graphSlotViewer);
+		
+
+			MainFrame.getInstance().getTree().updateUI();
+		}
+	}
+}

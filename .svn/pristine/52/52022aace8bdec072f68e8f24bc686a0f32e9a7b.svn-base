@@ -1,0 +1,36 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Document;
+import model.Project;
+import views.DocumentViewer;
+import views.ProjectViewer;
+
+public class NewDocument implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if (MainFrame.getInstance().getTree().getSelectionPath() != null){
+			MutableTreeNode node = (MutableTreeNode)MainFrame.getInstance().getTree().getSelectionPath().getLastPathComponent();
+			
+			if ((node instanceof Project)){
+				Project project = (Project)node;
+				Document document = new Document(project, "Document " + (node.getChildCount()+1));
+				node.insert(document, node.getChildCount());
+			
+				MainFrame.getInstance().getTree().updateUI();
+			
+			}
+		}
+		
+		
+	
+	}
+
+}

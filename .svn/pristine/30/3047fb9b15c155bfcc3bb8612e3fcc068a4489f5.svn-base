@@ -1,0 +1,75 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+import javax.swing.JFileChooser;
+import javax.swing.KeyStroke;
+import javax.swing.tree.DefaultTreeModel;
+
+import mainFrame.MainFrame;
+import model.Project;
+import model.Workspace;
+import serialization.ProjectFileFilter;
+
+@SuppressWarnings("serial")
+public class OpenProject extends AbstractGerudokActions  {
+
+	private ObjectInputStream os;
+
+	{
+		putValue("SmallIcon", loadIcon("images/open.png"));
+		putValue("Name", "Open Project");
+		putValue("ShortDescription", "Open project");
+		putValue(ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+
+	}
+
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JFileChooser jfc = new JFileChooser();
+		jfc.setFileFilter(new ProjectFileFilter());
+
+		if (jfc.showOpenDialog(MainFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
+			try {
+				os = new ObjectInputStream(new FileInputStream(
+						jfc.getSelectedFile()));
+
+				Project p = null;
+				try {
+					p = (Project) os.readObject();
+				} catch (ClassNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+
+				// ProjectViewer prviewer = new ProjectViewer(p);
+
+				// MainFrame.getInstance().getDesktopPane().add(prviewer);
+				Workspace workspace = (Workspace) MainFrame.getInstance()
+						.getTree().getModel().getRoot();
+
+				workspace.openProject(p, workspace.getChildCount()); // pozim
+																		// metode
+																		// iz
+																		// modela
+
+				((DefaultTreeModel) MainFrame.getInstance().getTree()
+						.getModel()).reload();
+
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+		}
+	}
+}

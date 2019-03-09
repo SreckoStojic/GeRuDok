@@ -1,0 +1,93 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+import javax.swing.JFileChooser;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import mainFrame.TreeWithListener;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import serialization.ProjectFileFilter;
+import elements.CircleElement;
+import elements.Element;
+import elements.RectangleElement;
+
+public class SaveProject implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		TreeWithListener treeWithListener = MainFrame.getInstance().getTree();
+	    MutableTreeNode node = (MutableTreeNode)treeWithListener.getLastSelectedPathComponent();
+	    if ((node instanceof Project)) {
+	      Project project = (Project)node;
+	      saveProject(project);
+	    } else if ((node instanceof Document)) {
+	      Project project = (Project)node.getParent();
+	      saveProject(project);
+	    } else if ((node instanceof Page)) {
+	      Project project = (Project)node.getParent().getParent();
+	      saveProject(project);
+	    } else if ((node instanceof TextSlot)) {
+	      Project project = (Project)node.getParent().getParent().getParent();
+	      saveProject(project);
+	    } else if ((node instanceof GraphSlot)) {
+		  Project project = (Project)node.getParent().getParent().getParent();
+		  saveProject(project);
+	    } else if ((node instanceof RectangleElement)) {
+	      Project project = (Project)node.getParent().getParent().getParent().getParent();
+	      saveProject(project);
+	    } else if ((node instanceof CircleElement)) {
+		  Project project = (Project)node.getParent().getParent().getParent().getParent();
+		  saveProject(project);
+		}
+	    treeWithListener.refresh();
+	 
+	}
+		
+	public void saveProject(Project project)
+	  {
+	    if (project.getProjectFile() == null) {
+	      JFileChooser fileChooser = new JFileChooser();
+	      ProjectFileFilter projectFileFilter = new ProjectFileFilter();
+	      fileChooser.setFileFilter(projectFileFilter);
+	      //chooser.setCurrentDirectory(SwitchWorkspace.getDirectory());
+	      File file = new File(project.getName() + ".grd");
+	      fileChooser.setSelectedFile(file);
+	      if (fileChooser.showSaveDialog(MainFrame.getInstance()) == 0) {
+	        file = fileChooser.getSelectedFile();
+	        project.setProjectFile(file);
+	      } else {
+	        return;
+	      }
+	    }
+	    try
+	    {
+	      ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(project.getProjectFile()));
+	      out.writeObject(project);
+	      
+	      //project.setChanged(false);
+	      out.close();
+	    }
+	    catch (FileNotFoundException e1) {
+	      e1.printStackTrace();
+	    }
+	    catch (IOException e1) {
+	      e1.printStackTrace();
+	    }
+	  }
+	
+
+	
+
+}

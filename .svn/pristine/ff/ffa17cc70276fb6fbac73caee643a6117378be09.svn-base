@@ -1,0 +1,168 @@
+package views;
+
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JDesktopPane;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.TextSlot;
+import model.Trash;
+import model.Workspace;
+import observers.GeRuDokEvent;
+
+@SuppressWarnings("serial")
+public class WorkspaceViewer extends JDesktopPane implements Observer {
+	private ArrayList<ProjectViewer> projectViewers = new ArrayList<ProjectViewer>();
+	private ArrayList<ProjectViewer> trashViewers = new ArrayList<ProjectViewer>();
+	private Workspace workspace;
+	private Trash trash=MainFrame.getInstance().getTrashModel();
+
+	public WorkspaceViewer(Workspace workspace) {
+		// TODO Auto-generated constructor stub
+		super();
+		this.workspace = workspace;
+		this.workspace.addObserver(this);
+		this.trash.addObserver(this);
+		
+	}
+	
+
+	public ArrayList<ProjectViewer> getProjectViewers() {
+		return projectViewers;
+	}
+
+	public void setProjectViewers(ArrayList<ProjectViewer> projectViewers) {
+		this.projectViewers = projectViewers;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		GeRuDokEvent geRuDokEvent = (GeRuDokEvent) arg;
+		int operation = geRuDokEvent.getOperation();
+		if (arg instanceof GeRuDokEvent) {
+			if (operation == GeRuDokEvent.ADD) {
+				Project project = (Project) geRuDokEvent.getObject();
+				ProjectViewer projectViewer = new ProjectViewer(project);
+				this.projectViewers.add(projectViewer);
+				add(projectViewer);
+
+				try {
+					projectViewer.setSelected(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				//System.out.println(this.projectViewers.size());
+			} else if (operation == GeRuDokEvent.REMOVE) {
+				MutableTreeNode node = (MutableTreeNode) MainFrame
+						.getInstance().getTree().getSelectionPath()
+						.getLastPathComponent();
+				ProjectViewer projectViewer = MainFrame.getInstance().selectInternalFrame(node);
+				//WorkspaceViewer workspaceViewer = (WorkspaceViewer) MainFrame
+						//.getInstance().getDesktopPane();
+		             	remove(projectViewer);
+			}
+			else if (operation == GeRuDokEvent.TRASHCLEAR){
+				removeAll();
+				this.trashViewers.clear();	
+			}
+			else if (operation == GeRuDokEvent.RESTORE){
+				MutableTreeNode node = (MutableTreeNode) MainFrame
+						.getInstance().getTrash().getSelectionPath()
+						.getLastPathComponent();
+				ProjectViewer projectViewer = MainFrame.getInstance().selectInternalFrame(node);
+				this.trashViewers.remove(projectViewer);
+				remove(projectViewer);
+			}
+			else if (operation == GeRuDokEvent.TRASHDELETE){
+				MutableTreeNode node = (MutableTreeNode) MainFrame
+						.getInstance().getTrash().getSelectionPath()
+						.getLastPathComponent();
+				ProjectViewer projectViewer = MainFrame.getInstance().selectInternalFrame(node);
+				this.trashViewers.remove(projectViewer);
+				remove(projectViewer);
+				
+			}
+			else if(operation == GeRuDokEvent.TRASH){
+				Project project = (Project) geRuDokEvent.getObject();
+				ProjectViewer projectViewer = new ProjectViewer(project);
+				this.trashViewers.add(projectViewer);
+				add(projectViewer);
+
+				try {
+					projectViewer.setSelected(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				//System.out.println(this.trashViewers.size());
+				
+			  }
+			
+				else if (operation == GeRuDokEvent.OPEN) {
+			
+
+				Project p = (Project) geRuDokEvent.getObject();
+				ProjectViewer prviewer = new ProjectViewer(p);
+				this.projectViewers.add(prviewer);
+				add(prviewer);
+				for (int i = 0; i < p.getChildCount(); i++) {
+					GeRuDokEvent geRuDokEventD = new GeRuDokEvent(
+							GeRuDokEvent.ADD, p.getDocument(i));
+					prviewer.update(null, geRuDokEventD);
+					for (int j = 0; j < (p.getDocument(i)).getChildCount(); j++) {
+						Document doc = p.getDocument(i);
+						DocumentViewer docv = prviewer
+								.getDocumentViewerForDocument(p.getDocument(i));
+
+						PageViewer pageviewer = new PageViewer(doc.getPage(j));
+
+						docv.addPageViewer(pageviewer);
+						for (int k = 0; k < p.getDocument(i).getPage(j)
+								.getChildCount(); k++) {
+							Page page = p.getDocument(i).getPage(j);
+							PageViewer pageviewerslot = docv
+									.getPageViewerForPage(doc.getPage(j));
+							if (page.getChildAt(k) instanceof TextSlot) {
+								TextSlotViewer tsw = new TextSlotViewer(
+										page.getTextSlot(k));
+								pageviewerslot.addTextViewer(tsw);
+							}
+							if (page.getChildAt(k) instanceof GraphSlot) {
+								GraphSlotViewer gsw = new GraphSlotViewer(
+										page.getGraphSlot(k));
+								pageviewerslot.addGraphSlotViewer(gsw);
+							}
+
+						}
+					}
+
+				}
+
+				try {
+					prviewer.setSelected(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
+	}
+
+	public ProjectViewer getProjectViewer(Project project) {
+		for (ProjectViewer pw : this.projectViewers) {
+			if (project.equals(pw.getProject()))
+				return pw;
+		}
+		return null;
+
+	}
+	
+
+}

@@ -1,0 +1,22 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JToggleButton;
+
+import mainFrame.MainFrame;
+import model.Document;
+
+public class ChangeDocView implements ActionListener
+{
+	  public void actionPerformed(ActionEvent e)
+	  {
+	    String label = ((JToggleButton)e.getSource()).getActionCommand();
+	    int documentViewType = Integer.parseInt(label.trim());
+	   // Document document = MainFrame.getInstance().getSelectedDocument();
+	    
+	   
+	  }
+
+}

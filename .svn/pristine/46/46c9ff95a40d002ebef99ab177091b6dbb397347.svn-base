@@ -1,0 +1,150 @@
+package command;
+
+import java.awt.Point;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import mainFrame.MainFrame;
+import model.ElementsSelection;
+import model.GraphSlot;
+import actions.EditPasteAction;
+import elements.CircleElement;
+import elements.Element;
+import elements.RectangleElement;
+import gui.TreeWithListener;
+
+public class PasteCommand extends AbstractCommand {
+	private GraphSlot Source;
+	private GraphSlot Destination;
+	private int OperationType;
+	private boolean First;
+	private Point2D StartingPoint;
+	private ArrayList<Element> originals;
+	private ArrayList<Element> copies;
+	private TreeWithListener tree = MainFrame.getInstance().getTree();
+
+	public PasteCommand(GraphSlot source, GraphSlot destination,
+			int operationType, Point2D startingPoint) {
+		this.Source = source;
+		this.Destination = destination;
+		this.OperationType = operationType;
+		this.StartingPoint = startingPoint;
+		this.originals = new ArrayList<Element>();
+		this.copies = new ArrayList<Element>();
+		this.First = true;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void doCommand() {
+		// TODO Auto-generated method stub
+		if (this.First) {
+			Transferable clipboardContent = MainFrame.getInstance()
+					.getClipboard().getContents(MainFrame.getInstance());
+			try {
+				this.originals = ((ArrayList<Element>) clipboardContent.getTransferData(ElementsSelection.elementFlavor));
+				System.out.println("Originals arrays size:"
+						+ this.originals.size());
+				System.out.println("Operation type:" + this.OperationType);
+			} catch (UnsupportedFlavorException | IOException e) {
+				e.printStackTrace();
+			}
+			if (EditPasteAction.getLastOperation() == 1) {
+				MainFrame.getInstance().getClipboard()
+						.setContents(null, MainFrame.getInstance());
+			}
+			this.First = false;
+		}
+		if (this.OperationType == 0) {
+			this.copies.clear();  
+			ArrayList<Element>pom=new ArrayList<Element>();
+			pom.addAll(originals);
+			for (int i=0;i<pom.size();i++){
+			//	Element e=pom.get(i)
+			//	Element e=copy(pom.get(i), i+1);
+				Element element=pom.get(i).clone();
+				Point2D newLocation=(Point2D) element.getPosition().clone();
+				newLocation.setLocation(StartingPoint.getX()+40*(i+1),StartingPoint.getY()+40*(i+1));
+				element.setPosition((Point) newLocation);
+				if(element instanceof CircleElement){
+					element=new CircleElement((CircleElement) element);
+					element.setName("Circle" + " " +(Destination.getChildCount()+1) );
+				}
+				else{
+					element= new RectangleElement((RectangleElement) element);
+					element.setName("Rectangle" + " "+(Destination.getChildCount()+1));
+				}
+			
+				this.copies.add(element);
+				this.Destination.addElement(element);
+			//	this.Source.addElement(e);
+			}
+		
+		} else if (this.OperationType == 1) {
+			// for (Element element : this.originals) {
+			// this.treeModel.removeNodeFromParent(element);
+			// }
+			this.copies.clear();  
+			ArrayList<Element>pom=new ArrayList<Element>();
+			pom.addAll(originals);
+			for(Element e : this.originals){
+			this.Source.removeCopy(e);
+			}
+			for (int i=0;i<pom.size();i++){
+			
+			//	Element e=pom.get(i)
+			//	Element e=copy(pom.get(i), i+1);
+				Element element=pom.get(i).clone();
+				Point2D newLocation=(Point2D) element.getPosition().clone();
+				newLocation.setLocation(StartingPoint.getX()+40*(i),StartingPoint.getY()+40*(i));
+				element.setPosition((Point) newLocation);
+				if(element instanceof CircleElement)
+					element=new CircleElement((CircleElement) element);
+				else element= new RectangleElement((RectangleElement) element);
+				this.copies.add(element);
+				this.Destination.addElement(element);
+			
+		
+		}
+	}
+
+}
+
+	@Override
+	public void undoCommand() {
+		// TODO Auto-generated method stub
+		if (this.OperationType == 0) {
+			//for (Element e : this.copies) {
+				// this.treeModel.removeNodeFromParent(e);
+			for (Element e : copies){
+			Destination.removeCopy(e);
+			}
+			
+			Destination.getSelectionModel().removeAllFromSelectionList();
+			Destination.update();
+			//}
+			this.tree.refresh();
+		} else if (this.OperationType == 1) {
+		/*	for (Element e : this.originals) {
+				// this.treeModel.removeNodeFromParent(e);
+				this.Source.removeElement(e);
+			
+			}*/
+			Source.getElements().addAll(originals);
+			for (Element e : copies){
+			Destination.removeCopy(e);
+			}
+			Destination.getSelectionModel().removeAllFromSelectionList();
+			Destination.update();
+			Source.update();
+			
+			this.tree.refresh();
+		}
+
+	}
+	
+
+}

@@ -1,0 +1,135 @@
+package actions;
+
+import model.GraphSlot;
+
+public class ActionManager {
+	private GraphSlot slot;
+	private Undo undoAction;
+	private Redo redoAction;
+	private NewProject newProject;
+	private NewDocument newDocument;
+	private NewPage newPage;
+	private NewGraphicSlot graphicSlot;
+	private NewTextSlot textSlot;
+	private SaveProject saveproject;
+	private OpenProject openproject;
+	private DeleteItem deleteItem;
+	
+	public ActionManager(){
+		initialiseActions();
+	}
+	
+	private void initialiseActions() {
+		undoAction = new Undo(slot);
+		redoAction = new Redo(slot);
+		newProject = new NewProject();
+		
+		newDocument = new NewDocument();
+		newDocument.setEnabled(false);
+		
+		newPage = new NewPage();
+		newPage.setEnabled(false);
+		
+		graphicSlot= new NewGraphicSlot();
+		graphicSlot.setEnabled(false);
+		
+		textSlot=new NewTextSlot();
+		textSlot.setEnabled(false);
+		
+		saveproject=new SaveProject();
+		saveproject.setEnabled(false);
+		openproject = new OpenProject();
+		deleteItem = new DeleteItem();
+		deleteItem.setEnabled(false);
+		
+	}
+
+	public Undo getUndoAction() {
+		return undoAction;
+	}
+
+	public void setUndoAction(Undo undoAction) {
+		this.undoAction = undoAction;
+	}
+
+	public Redo getRedoAction() {
+		return redoAction;
+	}
+
+	public void setRedoAction(Redo redoAction) {
+		this.redoAction = redoAction;
+	}
+
+	public NewProject getNewProject() {
+		return newProject;
+	}
+
+	public void setNewProject(NewProject newProject) {
+		this.newProject = newProject;
+	}
+
+	public NewDocument getNewDocument() {
+		return newDocument;
+	}
+
+	public void setNewDocument(NewDocument newDocument) {
+		this.newDocument = newDocument;
+	}
+
+	public NewPage getNewPage() {
+		return newPage;
+	}
+
+	public void setNewPage(NewPage newPage) {
+		this.newPage = newPage;
+	}
+
+	public NewGraphicSlot getGraphicSlot() {
+		return graphicSlot;
+	}
+
+	public void setGraphicSlot(NewGraphicSlot graphicSlot) {
+		this.graphicSlot = graphicSlot;
+	}
+
+	public NewTextSlot getTextSlot() {
+		return textSlot;
+	}
+
+	public void setTextSlot(NewTextSlot textSlot) {
+		this.textSlot = textSlot;
+	}
+
+	public SaveProject getSaveproject() {
+		return saveproject;
+	}
+
+	public void setSaveproject(SaveProject saveproject) {
+		this.saveproject = saveproject;
+	}
+
+	public OpenProject getOpenproject() {
+		return openproject;
+	}
+
+	public void setOpenproject(OpenProject openproject) {
+		this.openproject = openproject;
+	}
+
+
+	public DeleteItem getDeleteItem() {
+		return deleteItem;
+	}
+
+	public void setDeleteItem(DeleteItem deleteItem) {
+		this.deleteItem = deleteItem;
+	}
+	public GraphSlot getSlot() {
+		return slot;
+	}
+
+	public void setSlot(GraphSlot slot) {
+		this.slot = slot;
+	}
+	
+}

@@ -1,0 +1,63 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Page;
+import model.TextSlot;
+import views.DocumentViewer;
+import views.PageViewer;
+import views.TextSlotViewer;
+
+public class NewTextSlot extends AbstractAction implements ActionListener {
+	public NewTextSlot()
+	  {
+	    putValue("SmallIcon", loadIcon("images/text-slot.png"));
+	    putValue("Name", "New TextSlot");
+	    putValue("ShortDescription", "New TextSlot");
+	   
+	  }
+	 public Icon loadIcon(String fileName)
+	  {
+	    URL imageURL = getClass().getClassLoader().getResource(fileName);
+	    Icon icon = null;
+	    if (imageURL != null) {
+	      icon = new ImageIcon(imageURL);
+	    } else {
+	      System.err.println("Resource not found: " + fileName);
+	    }
+	    return icon;
+	  }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (MainFrame.getInstance().getTree().getSelectionPath().getLastPathComponent() != null) {
+			MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance().getTree().getSelectionPath().getLastPathComponent();
+
+			if ((node instanceof Page)) {
+				Page page = (Page) node;
+				TextSlot textslot= new TextSlot(page, "TextSlot" + (node.getChildCount()+1));
+				node.insert(textslot, (node.getChildCount()));
+				
+				TextSlotViewer textSLotviewer = new TextSlotViewer(textslot);
+				DocumentViewer documentViewer = MainFrame.getInstance()
+						.getSelectedDocumentViewer();
+				
+
+				PageViewer pageViewer = (PageViewer)documentViewer.getPageViewerForPage(page);
+				pageViewer.addTextViewer(textSLotviewer);
+				
+				MainFrame.getInstance().getTree().updateUI();
+			}
+		}
+	}
+
+}

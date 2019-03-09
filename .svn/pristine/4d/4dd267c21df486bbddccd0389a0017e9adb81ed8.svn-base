@@ -1,0 +1,52 @@
+package state;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import model.Page;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+
+import command.AddDeviceCommand;
+
+import elements.CircleElement;
+
+public class CircleState extends State {
+	private GraphSlot slot;
+
+	public CircleState(GraphSlot slot) {
+		this.slot = slot;
+	}
+
+	public void mousePressed(MouseEvent e) {
+		if (e.getButton() == 1) {
+			String name = "Circle " + (this.slot.getChildCount() + 1);
+			Point position = e.getPoint();
+			Dimension dimension = new Dimension(50, 50);
+			BasicStroke stroke = new BasicStroke(2.0F);
+			Paint paint = Color.WHITE;
+			CircleElement krug = new CircleElement(name, slot, position,
+					dimension, stroke, paint);
+			this.slot.insert(krug, this.slot.getChildCount());
+			MainFrame.getInstance().getTree().updateUI();
+
+			
+			DocumentViewer docw = MainFrame.getInstance()
+					.getSelectedDocumentViewer();
+			PageViewer pageviewer = docw.getPageViewerForPage((Page) slot
+					.getParent());
+			GraphSlotViewer graphSlotViewer = pageviewer
+					.getGraphSlotViewerForslot(slot);
+			graphSlotViewer.getCommandManager().addCommand(
+					new AddDeviceCommand(krug, slot, position, 1));
+		}
+	}
+
+}

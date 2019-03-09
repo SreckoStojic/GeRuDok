@@ -1,0 +1,26 @@
+package mainFrame;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+
+import actions.ChangeDocView;
+
+public class DocToolbar  extends JToolBar
+{
+	  public DocToolbar()
+	  {
+	    ButtonGroup btnGroup = new ButtonGroup();
+	    for (int i = 1; i <= 16; i++)
+	    {
+	      JToggleButton btn = new JToggleButton(" " + i + " ");
+	      if (i == 1) {
+	        btn.setSelected(true);
+	      }
+	      btn.addActionListener(new ChangeDocView());
+	      add(btn);
+	      btnGroup.add(btn);
+	    }
+	  }
+
+}

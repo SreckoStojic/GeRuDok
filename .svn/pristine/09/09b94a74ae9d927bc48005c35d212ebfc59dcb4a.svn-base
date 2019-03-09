@@ -1,0 +1,92 @@
+
+Circle = Circle
+
+Document = Document
+
+GraphSlot = GraphSlot
+
+Page = Page
+
+Project = Project
+
+Rectangle = Rectangle
+
+TextSlot = TextSlot
+
+Workspace = Workspace
+
+mbEdit = Edit
+
+mbHelp = Help
+
+mbLanguage = Language
+
+mbProject = Project
+
+mbSettings = Settings
+
+mbWindow = Window
+
+miAbout = About
+
+miCHorizontaly = Cascade horizontally
+
+miDelete = Delete
+
+miEnglish = English
+
+miLooknFeel = Look and feel
+
+miNewDocument = New Document
+
+miNewGS = New GraphicSlot
+
+miNewPage = NewPage
+
+miNewProject = NewProject
+
+miNewTS = New TextSlot
+
+miOpenProject = Open Project
+
+miSaveProject = Save Project
+
+miSerbian = Serbian - Latinic
+
+miTileH = Tile horizontally
+
+miTileV = Tile vertically
+
+miSerbianCyrillic = Serbian - Cyrillic
+
+miNimbus = Nimbus
+
+titleName = GeRuDok team 9-6
+
+langStatusBar = Language: English
+
+milos = Milos Gagovic (C)
+
+srecko = Srecko Stojic
+
+closeAbout = close
+
+aboutTitle = About
+
+okAbout = Ok
+
+tim96 = Team 9-6
+
+aboutMilos = Ime: Milos\nPrezime: Gagovic \nMail: gagovicmilosgagovic@gmail.com\nBroj indeksa: RA18/2013
+
+aboutSrecko = Ime: Srecko\nPrezime: Stojic\nMail: stojic.srecko@gmail.com\nBroj indeksa: RA15/2012
+
+aboutTooltip = About Team 9-6
+
+miRename = Rename
+
+miExit = Exit
+
+miExitQuestion = Are you sure you want to exit?
+
+confirmExit = Confirm exit

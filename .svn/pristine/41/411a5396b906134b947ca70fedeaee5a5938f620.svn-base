@@ -1,0 +1,40 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.tree.MutableTreeNode;
+
+import mainFrame.MainFrame;
+import model.Page;
+import model.TextSlot;
+import views.DocumentViewer;
+import views.PageViewer;
+import views.TextSlotViewer;
+
+public class NewTextSlot implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (MainFrame.getInstance().getTree().getSelectionPath().getLastPathComponent() != null) {
+			MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance().getTree().getSelectionPath().getLastPathComponent();
+
+			if ((node instanceof Page)) {
+				Page page = (Page) node;
+				TextSlot textslot= new TextSlot(page, "TextSlot" + (node.getChildCount()+1));
+				node.insert(textslot, (node.getChildCount()));
+				
+				TextSlotViewer textSLotviewer = new TextSlotViewer(textslot);
+				DocumentViewer documentViewer = MainFrame.getInstance()
+						.getSelectedDocumentViewer();
+				
+
+				PageViewer pageViewer = (PageViewer)documentViewer.getPageViewerForPage(page);
+				pageViewer.addTextViewer(textSLotviewer);
+				
+				MainFrame.getInstance().getTree().updateUI();
+			}
+		}
+	}
+
+}

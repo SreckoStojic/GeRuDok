@@ -1,0 +1,55 @@
+package mainFrame;
+
+import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+import javax.swing.JToolBar;
+
+import model.GraphSlot;
+import actions.CircleStateAction;
+import actions.RectangleStateAction;
+import actions.Redo;
+import actions.SelectStateAction;
+import actions.Undo;
+
+public class SlotToolbar extends JToolBar {
+    private Undo undo;
+    private Redo redo;
+    private ArrayList<AbstractAction> lista=new ArrayList<>();
+	public SlotToolbar(GraphSlot slot) {
+
+		add(new SelectStateAction(slot));
+		addSeparator();
+		add(new CircleStateAction(slot));
+		add(new RectangleStateAction(slot));
+		addSeparator();
+		Undo undo = new Undo(slot);
+		undo.setEnabled(false);
+		lista.add(undo);
+		setUndo(undo);
+		add(undo);
+		Redo redo = new Redo(slot);
+		redo.setEnabled(false);
+		lista.add(redo);
+		setRedo(redo);
+		add(redo);
+	}
+	public Undo getUndo() {
+		return undo;
+	}
+	public void setUndo(Undo undo) {
+		this.undo = undo;
+	}
+	public Redo getRedo() {
+		return redo;
+	}
+	public void setRedo(Redo redo) {
+		this.redo = redo;
+	}
+	public ArrayList<AbstractAction> getLista() {
+		return lista;
+	}
+	public void setLista(ArrayList<AbstractAction> lista) {
+		this.lista = lista;
+	}
+}

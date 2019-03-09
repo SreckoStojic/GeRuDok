@@ -1,0 +1,156 @@
+package mainFrame;
+
+import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+
+import actions.AboutDialogAction;
+import actions.CascadeHor;
+import actions.DeleteItem;
+import actions.NewDocument;
+import actions.NewGraphicSlot;
+import actions.NewPage;
+import actions.NewProject;
+import actions.NewTextSlot;
+import actions.OpenProject;
+import actions.SaveProject;
+import actions.TileHor;
+import actions.TileVer;
+
+public class ToolBar extends JToolBar {
+	private ArrayList<JButton> listButtons=new ArrayList<>();
+	
+	public ToolBar(){
+		super(SwingConstants.HORIZONTAL);
+		
+		//project
+		
+		JButton btnNewProject = new JButton();
+		btnNewProject.setIcon(new ImageIcon("images/new-project.png"));
+		btnNewProject.setToolTipText("create new project");
+		btnNewProject.addActionListener(new NewProject());
+		this.listButtons.add(btnNewProject);
+		add(btnNewProject);
+		
+
+		JButton btnNewDocument = new JButton();
+		btnNewDocument.setIcon(new ImageIcon("images/new-document.png"));
+		btnNewDocument.setToolTipText("create new document");
+		btnNewDocument.addActionListener(new NewDocument());
+		btnNewDocument.setEnabled(false);
+		this.listButtons.add(btnNewDocument);
+		add(btnNewDocument);
+		
+
+		JButton btnNewPage = new JButton();
+		btnNewPage.setIcon(new ImageIcon("images/new-page.png"));
+		btnNewPage.setToolTipText("create new page");
+		btnNewPage.addActionListener(new NewPage());
+		btnNewPage.setEnabled(false);
+		this.listButtons.add(btnNewPage);
+		add(btnNewPage);
+		
+		JButton btnNewGraphicSlot = new JButton();
+		btnNewGraphicSlot.setIcon(new ImageIcon("images/graphic-slot.png"));
+		btnNewGraphicSlot.setToolTipText("create new graphic slot");
+		btnNewGraphicSlot.addActionListener(new NewGraphicSlot());
+		btnNewGraphicSlot.setEnabled(false);
+		this.listButtons.add(btnNewGraphicSlot);
+		add(btnNewGraphicSlot);
+		
+		JButton btnNewTextSlot = new JButton();
+		btnNewTextSlot.setIcon(new ImageIcon("images/text-slot.png"));
+		btnNewTextSlot.setToolTipText("create new text slot");
+		btnNewTextSlot.addActionListener(new NewTextSlot());
+		btnNewTextSlot.setEnabled(false);
+		this.listButtons.add(btnNewTextSlot);
+		add(btnNewTextSlot);
+	
+		addSeparator();
+		
+		//save, open
+		
+		
+		JButton btnSaveProject = new JButton();
+		btnSaveProject.setIcon(new ImageIcon("images/save.png"));
+		btnSaveProject.setToolTipText("save selected project");
+		btnSaveProject.addActionListener(new SaveProject());
+		btnSaveProject.setEnabled(false);
+		this.listButtons.add(btnSaveProject);
+		add(btnSaveProject);
+		
+		JButton btnOpenProject = new JButton();
+		btnOpenProject.setIcon(new ImageIcon("images/open.png"));
+		btnOpenProject.setToolTipText("open project");
+		btnOpenProject.addActionListener(new OpenProject());
+		add(btnOpenProject);
+		
+		
+		addSeparator();
+		//edit
+		
+		JButton btnDelete = new JButton();
+		btnDelete.setIcon(new ImageIcon("images/delete-icon.png"));
+		btnDelete.setToolTipText("delete item");
+		btnDelete.addActionListener(new DeleteItem());
+		btnDelete.setEnabled(false);
+		this.listButtons.add(btnDelete);
+		add(btnDelete);
+		
+		addSeparator();
+		//window
+		
+		JButton btnCascadeView = new JButton();
+		btnCascadeView.setIcon(new ImageIcon("images/cascade-view.png"));
+		btnCascadeView.setToolTipText("cascade projects view");
+		btnCascadeView.addActionListener(new CascadeHor());
+		add(btnCascadeView);
+		
+		
+		JButton btnTileHor = new JButton();
+		btnTileHor.setIcon(new ImageIcon("images/tile-h.png"));
+		btnTileHor.setToolTipText("tile horizontally");
+		btnTileHor.addActionListener(new TileHor());
+		add(btnTileHor);
+		
+		JButton btnTileVer = new JButton();
+		btnTileVer.setIcon(new ImageIcon("images/tile-v.png"));
+		btnTileVer.setToolTipText("tile vertically");
+		btnTileVer.addActionListener(new TileVer());
+		add(btnTileVer);
+		
+		
+		addSeparator();
+		//settings
+		
+		JButton btnLookAndFeel = new JButton();
+		btnLookAndFeel.setIcon(new ImageIcon("images/looknfeel-icon.png"));
+		btnLookAndFeel.setToolTipText("change look and feel");
+		add(btnLookAndFeel);
+		
+		
+		addSeparator();
+		//help
+		
+		JButton btnAbout = new JButton();
+		btnAbout.setIcon(new ImageIcon("images/info-logo.png"));
+		
+		btnAbout.setToolTipText("about 9.6 team");
+		btnAbout.addActionListener(new AboutDialogAction());
+		add(btnAbout);
+		
+		
+		setFloatable(true);
+	}
+
+	public ArrayList<JButton> getListButtons() {
+		return listButtons;
+	}
+
+	public void setListButtons(ArrayList<JButton> listButtons) {
+		this.listButtons = listButtons;	}
+	
+}

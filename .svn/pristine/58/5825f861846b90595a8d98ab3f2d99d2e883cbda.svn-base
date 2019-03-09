@@ -1,0 +1,87 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.tree.MutableTreeNode;
+
+import elements.CircleElement;
+import elements.RectangleElement;
+import mainFrame.MainFrame;
+import model.Document;
+import model.GraphSlot;
+import model.Page;
+import model.Project;
+import model.Workspace;
+import views.DocumentViewer;
+import views.GraphSlotViewer;
+import views.PageViewer;
+
+public class Undo extends AbstractAction {
+	 private GraphSlot slot;
+
+	public Undo(GraphSlot slot) {
+		putValue("Name", "Undo");
+		putValue("SmallIcon", new ImageIcon("images/undo.png"));
+		this.slot=slot;
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		// System.out.println("ffgs");
+		// DocumentViewer
+		// docw=MainFrame.getInstance().getSelectedDocumentViewer();
+		// Document doc=MainFrame.getInstance().getSelectedDocument();
+	/*	MutableTreeNode node = (MutableTreeNode) MainFrame.getInstance()
+				.getTree().getSelectionPath().getLastPathComponent();
+		if (node instanceof Page){
+			DocumentViewer docw = MainFrame.getInstance().getSelectedDocumentViewer();
+			PageViewer pageviewer = docw.getPageViewerForPage((Page) node);
+			for (int i=0;i<node.getChildCount();i++)
+			{
+				if (((GraphSlot) node.getChildAt(i)).isDesignMode()==true){
+					GraphSlotViewer graph=pageviewer.getGraphSlotViewerForslot((GraphSlot) node.getChildAt(i));
+					graph.getCommandManager().undoCommand();
+					
+				}
+				
+			}
+
+		}
+
+		else if (node instanceof GraphSlot) {
+			comand(node);
+
+		} else if (node instanceof CircleElement) {
+			comand((MutableTreeNode) node.getParent());
+		} else if (node instanceof RectangleElement) {
+			comand((MutableTreeNode) node.getParent());
+		}
+
+		// MainFrame.getInstance().getCommandManager().undoCommand();
+
+	}
+
+	public void comand(MutableTreeNode parent) {
+		DocumentViewer docw = MainFrame.getInstance().getSelectedDocumentViewer();
+		PageViewer pageviewer = docw.getPageViewerForPage((Page) parent.getParent());
+		GraphSlotViewer graphSlotViewer = pageviewer.getGraphSlotViewerForslot((GraphSlot) parent);
+
+		graphSlotViewer.getCommandManager().undoCommand();
+		
+		
+		*/
+		DocumentViewer docviewer=MainFrame.getInstance().getSelectedDocumentViewer();
+		PageViewer pageviewer=docviewer.getPageViewerForPage((Page)this.slot.getParent());
+		GraphSlotViewer grahpSlotViewer=pageviewer.getGraphSlotViewerForslot(slot);
+		grahpSlotViewer.getCommandManager().undoCommand();
+		pageviewer.update(null, null);
+		
+		
+
+	}
+
+}

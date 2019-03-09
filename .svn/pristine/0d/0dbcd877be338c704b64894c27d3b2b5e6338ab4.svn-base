@@ -1,0 +1,35 @@
+package utils;
+
+import java.awt.Image;
+import java.net.URL;
+
+import javax.rmi.CORBA.Util;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+public class IconLoader {
+	public static Icon loadIcon(String fileName)
+	  {
+	    URL imageURL = Util.class.getClassLoader().getResource(fileName);
+	    Icon icon = null;
+	    if (imageURL != null) {
+	      icon = new ImageIcon(imageURL);
+	    } else {
+	      System.err.println("Resource not found: " + fileName);
+	    }
+	    return icon;
+	  }
+	  
+	  public static Image loadImage(String fileName)
+	  {
+	    URL imageURL = Util.class.getClassLoader().getResource(fileName);
+	    Image image = null;
+	    if (imageURL != null) {
+	      image = new ImageIcon(imageURL).getImage();
+	    } else {
+	      System.err.println("Resource not found: " + fileName);
+	    }
+	    return image;
+	  }
+
+}

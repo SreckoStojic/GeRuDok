@@ -1,0 +1,68 @@
+package command;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.geom.Point2D;
+
+import mainFrame.MainFrame;
+import model.GraphSlot;
+import elements.CircleElement;
+import elements.Element;
+import elements.RectangleElement;
+
+public class AddDeviceCommand extends AbstractCommand {
+
+	GraphSlot graphSlot;
+	Point2D lastPosition;
+	Element element ;
+	
+	int deviceType;
+	
+
+	public AddDeviceCommand(Element e,GraphSlot graphSlot, Point2D lastPosition,int deviceType) {
+		this.graphSlot = graphSlot;
+		this.lastPosition = lastPosition;
+		this.deviceType=deviceType;
+		this.element=e;
+		
+		
+	}
+
+	@Override
+	public void doCommand() {
+		
+			//System.out.println("Duplo kreiranje");
+			if (deviceType==1){
+				CircleElement crc = new CircleElement("Circle" + graphSlot.getChildCount(),
+						    this.graphSlot	, (Point) lastPosition, new Dimension(50, 50),
+							new BasicStroke(2.0F), Color.WHITE);
+				element=crc;
+			}else if (deviceType==2){
+				RectangleElement rec = new RectangleElement("Rectangle" + graphSlot.getChildCount(),
+						this.graphSlot, (Point) lastPosition, new Dimension(75, 50),
+						new BasicStroke(2.0F), Color.WHITE);
+				element=rec;
+			}
+			
+		
+		graphSlot.addElement(element);	
+		MainFrame.getInstance().getTree().updateUI();
+		System.out.println("Vracen");
+		
+	    
+			
+	}
+
+	@Override 
+	public void undoCommand() {
+	
+		graphSlot.removeElement(element);
+		MainFrame.getInstance().getTree().updateUI();
+		System.out.println("Obrisan");
+		
+
+	}
+
+}

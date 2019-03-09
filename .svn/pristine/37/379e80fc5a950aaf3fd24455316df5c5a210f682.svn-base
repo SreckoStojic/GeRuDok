@@ -1,0 +1,32 @@
+package actions;
+
+public class ActionManager {
+	private Undo undoAction;
+	private Redo redoAction;
+	
+	public ActionManager(){
+		initialiseActions();
+	}
+	
+	private void initialiseActions() {
+		setUndoAction(new Undo());
+		setRedoAction(new Redo());
+	}
+
+	public Undo getUndoAction() {
+		return undoAction;
+	}
+
+	public void setUndoAction(Undo undoAction) {
+		this.undoAction = undoAction;
+	}
+
+	public Redo getRedoAction() {
+		return redoAction;
+	}
+
+	public void setRedoAction(Redo redoAction) {
+		this.redoAction = redoAction;
+	}
+	
+}

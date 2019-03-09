@@ -1,0 +1,29 @@
+package actions;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultTreeModel;
+
+import mainFrame.MainFrame;
+import model.Project;
+import model.Workspace;
+import views.ProjectViewer;
+
+public class NewProject implements ActionListener {
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Workspace workspace = (Workspace)MainFrame.getInstance().getTree().getModel().getRoot();
+		Project project = new Project("Project " + (workspace.getChildCount()+1),workspace);
+		workspace.insert(project, workspace.getChildCount());
+		
+		((DefaultTreeModel)MainFrame.getInstance().getTree().getModel()).reload();
+		
+	}
+	
+
+}

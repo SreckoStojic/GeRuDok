@@ -1,0 +1,138 @@
+package elements;
+
+import java.awt.Dimension;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.io.Serializable;
+import java.util.Enumeration;
+
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+
+import model.GraphSlot;
+
+public class Element implements MutableTreeNode, Serializable {
+	protected String name;
+	protected Point position;
+	protected Dimension dimension;
+	protected StrokeAdapter stroke;
+	protected Paint paint;
+	protected Shape shape;
+	private GraphSlot parent;
+
+	public Element(String name,GraphSlot parent, Point position, Dimension dimension,
+			Stroke stroke, Paint paint) {
+		this.name = name;
+		this.parent=parent;
+		this.position = position;
+		this.dimension = dimension;
+		this.stroke = new StrokeAdapter(stroke);
+		this.paint = paint;
+	}
+
+	public TreeNode getChildAt(int childIndex) {
+		return null;
+	}
+
+	public int getChildCount() {
+		return 0;
+	}
+
+	public TreeNode getParent() {
+		return this.parent;
+	}
+
+	public int getIndex(TreeNode node) {
+		return 0;
+	}
+
+	public boolean getAllowsChildren() {
+		return false;
+	}
+
+	public boolean isLeaf() {
+		return true;
+	}
+
+	public Enumeration children() {
+		return null;
+	}
+
+	public void insert(MutableTreeNode child, int index) {
+	}
+
+	public void remove(int index) {
+	}
+
+	public void remove(MutableTreeNode node) {
+	}
+
+	public void setUserObject(Object object) {
+	}
+
+	public void removeFromParent() {
+	}
+
+	public void setParent(MutableTreeNode newParent) {
+	}
+
+	public String toString() {
+		return this.name;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Point getPosition() {
+		return this.position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+
+	public Dimension getDimension() {
+		return this.dimension;
+	}
+
+	public void setDimension(Dimension dimension) {
+		this.dimension = dimension;
+	}
+
+	public Stroke getStroke() {
+		return this.stroke;
+	}
+
+	public void setStroke(Stroke stroke) {
+		this.stroke = new StrokeAdapter(stroke);
+	}
+
+	public Paint getPaint() {
+		return this.paint;
+	}
+
+	public void setPaint(Paint paint) {
+		this.paint = paint;
+	}
+
+	public Shape getShape() {
+		return this.shape;
+	}
+
+	public void setShape(Shape shape) {
+		this.shape = shape;
+	}
+
+	public boolean isElementAt(Point pos) {
+		return getShape().contains(pos);
+	}
+	
+
+}
